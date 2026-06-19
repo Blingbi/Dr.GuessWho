@@ -1,75 +1,73 @@
 {
-  "coreTraits": [
+  "identityTraits": [
     "doctor",
     "companion",
     "villain",
-    "recurring",
-    "timelord",
-    "human",
-    "alien",
-    "robotic",
-    "immortal",
-    "female",
-    "male",
-    "nonBinary",
-    "classicWho",
-    "newWho",
-    "travelsInTardis",
-    "associatedWithUNIT",
-    "associatedWithTorchwood",
-    "timeTraveler"
-  ],
-
-  "factionTraits": [
-    "UNIT",
-    "Torchwood",
-    "TimeLords",
-    "Gallifrey",
-    "PaternosterGang"
+    "recurringCharacter"
   ],
 
   "speciesTraits": [
+    "human",
+    "timeLord",
     "dalek",
     "cyberman",
     "sontaran",
     "silurian",
     "zygons",
     "ood",
-    "weepingAngel",
-    "silence",
-    "humanLike"
+    "weepingAngelEntity",
+    "silenceEntity",
+    "roboticBeing",
+    "nonHumanIntelligence",
+    "abstractEntity"
   ],
 
-  "abilityTraits": [
+  "organizationTraits": [
+    "UNIT",
+    "Torchwood",
+    "Gallifrey",
+    "PaternosterGang"
+  ],
+
+  "mechanicTraits": [
     "regenerates",
-    "shapeShifter",
+    "timeTravelCapability",
     "telepathic",
-    "timeLocked",
+    "shapeShifting",
     "hiveMind",
-    "memoryWipe",
-    "immortal"
+    "memoryManipulation",
+    "immortal",
+    "timeLocked"
   ],
 
-  "storyTraits": [
-    "foughtTimeWar",
-    "createdDaleks",
-    "partOfProphecy",
-    "destroyedGallifrey",
-    "lastOfSpecies",
+  "roleTraits": [
     "leader",
-    "scientist",
     "soldier",
-    "politician"
+    "scientist",
+    "politician",
+    "inventor",
+    "detective",
+    "trickster",
+    "survivor",
+    "warrior",
+    "civilian"
   ],
 
-  "doctorSpecificTraits": [
-    "biGenerated",
+  "loreTraits": [
+    "foughtTimeWar",
+    "destroyedGallifrey",
+    "createdDaleks",
+    "lastOfSpecies",
+    "partOfProphecy"
+  ],
+
+  "doctorTraits": [
     "warDoctor",
     "fugitiveDoctor",
-    "usesSonic",
+    "biGenerated",
+    "usesSonicScrewdriver",
     "wearsBowTie",
     "wearsScarf",
-    "playsGuitar",
-    "allonsY"
+    "playsGuitar"
   ]
 }
