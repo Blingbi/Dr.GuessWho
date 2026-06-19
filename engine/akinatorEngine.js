@@ -1,133 +1,90 @@
 export class AkinatorEngine {
- constructor(data) {
-  // ----------------------------
-  // CLEAN INPUT DATA
-  // ----------------------------
-  this.allCharacters = Array.isArray(data)
-    ? data
-        .filter(c => c && typeof c === "object")
-        .map(c => ({
-          ...c,
-          name: typeof c.name === "string" ? c.name : "Unknown",
-          traits: Array.isArray(c.traits)
-            ? c.traits.filter(t => typeof t === "string")
-            : []
-        }))
-    : [];
+  constructor(data) {
+    // ----------------------------
+    // CLEAN INPUT DATA (SAFE)
+    // ----------------------------
+    this.allCharacters = Array.isArray(data)
+      ? data
+          .filter(c => c && typeof c === "object")
+          .map(c => ({
+            ...c,
+            name: typeof c.name === "string" ? c.name : "Unknown",
+            traits: Array.isArray(c.traits)
+              ? c.traits.filter(t => typeof t === "string")
+              : []
+          }))
+      : [];
 
-  this.candidates = [...this.allCharacters];
-  this.askedTraits = new Set();
-  this.lastTraitAsked = null;
+    this.candidates = [...this.allCharacters];
+    this.askedTraits = new Set();
+    this.lastTraitAsked = null;
 
-  this.startCount = this.allCharacters.length;
+    this.startCount = Math.max(this.allCharacters.length, 1);
 
-  // ----------------------------
-  // TRAIT FREQUENCY MAP
-  // ----------------------------
-  this.traitFrequency = new Map();
+    // ----------------------------
+    // TRAIT MAPS
+    // ----------------------------
+    this.traitFrequency = new Map();
+    this.traitIndex = new Map();
 
-  for (const c of this.allCharacters) {
-    const traits = Array.isArray(c?.traits) ? c.traits : [];
+    for (const c of this.allCharacters) {
+      const traits = c.traits || [];
 
-    for (const t of traits) {
-      this.traitFrequency.set(
-        t,
-        (this.traitFrequency.get(t) || 0) + 1
-      );
-    }
-  }
+      for (const t of traits) {
+        this.traitFrequency.set(t, (this.traitFrequency.get(t) || 0) + 1);
 
-  // ----------------------------
-  // TRAIT INDEX
-  // ----------------------------
-  this.traitIndex = new Map();
-
-  for (const c of this.allCharacters) {
-    const traits = Array.isArray(c?.traits) ? c.traits : [];
-
-    for (const t of traits) {
-      if (!this.traitIndex.has(t)) {
-        this.traitIndex.set(t, new Set());
+        if (!this.traitIndex.has(t)) {
+          this.traitIndex.set(t, new Set());
+        }
+        this.traitIndex.get(t).add(c.name);
       }
-
-      this.traitIndex.get(t).add(c.name);
     }
   }
 
   // ----------------------------
-  // DEBUG OUTPUT
-  // ----------------------------
-  console.log(
-    "Akinator loaded",
-    this.allCharacters.length,
-    "characters"
-  );
-
-  const badCharacters = this.allCharacters.filter(
-    c => !Array.isArray(c.traits)
-  );
-
-  if (badCharacters.length) {
-    console.warn("Bad characters found:", badCharacters);
-  }
-}
-
-  // ----------------------------
-  // GAME PHASE
+  // PHASE
   // ----------------------------
   getPhase() {
-    const remaining = this.candidates.length;
-
-    if (remaining > 25) return "early";
-    if (remaining > 6) return "mid";
+    const r = this.candidates.length;
+    if (r > 25) return "early";
+    if (r > 6) return "mid";
     return "end";
   }
 
-  // ----------------------------
-  // RESET GAME
-  // ----------------------------
   reset() {
     this.candidates = [...this.allCharacters];
     this.askedTraits.clear();
     this.lastTraitAsked = null;
   }
 
-  // ----------------------------
-  // DEPTH
-  // ----------------------------
   getDepth() {
     return 1 - (this.candidates.length / this.startCount);
   }
 
   // ----------------------------
-  // TRAIT WEIGHTS
+  // WEIGHTS
   // ----------------------------
   traitWeight(trait) {
-    const baseWeights = {
+    const base = {
       villain: 5,
       companion: 5,
       doctor: 5,
-
       human: 3,
       alien: 3,
-
       timelord: 3.5,
       immortal: 2,
-
       male: 2,
       female: 2
     };
 
-    const base = baseWeights[trait] || 1;
-
     const freq = this.traitFrequency.get(trait) || 1;
-    const rarityBoost = 1 / Math.log2(freq + 1);
+    const rarity = 1 / Math.log2(freq + 2);
 
-    return base * (1 + rarityBoost);
+    return (base[trait] || 1) * (1 + rarity);
   }
 
   // ----------------------------
-  // SPLIT BY TRAIT
+  // SPLIT
   // ----------------------------
   splitByTrait(trait) {
     const yesSet = this.traitIndex.get(trait) || new Set();
@@ -145,14 +102,12 @@ export class AkinatorEngine {
 
   isBadTraitSplit(trait) {
     const { yes, no } = this.splitByTrait(trait);
-
     const ratio = yes.length / (no.length + 1);
-
-    return ratio < 0.15 || ratio > 0.85;
+    return ratio < 0.1 || ratio > 0.9;
   }
 
   // ----------------------------
-  // INFORMATION GAIN
+  // INFORMATION GAIN (SAFE)
   // ----------------------------
   informationGain(trait) {
     const total = this.candidates.length;
@@ -170,136 +125,90 @@ export class AkinatorEngine {
     const pYes = yes / total;
     const pNo = no / total;
 
-    const entropyBefore = Math.log2(total);
-    const entropyAfter =
-      -pYes * Math.log2(pYes) -
-      pNo * Math.log2(pNo);
+    const entropy =
+      -(pYes * Math.log2(pYes)) -
+      (pNo * Math.log2(pNo));
 
-    return entropyBefore - entropyAfter;
+    return Math.log2(total) - entropy;
   }
 
   // ----------------------------
-  // ALL TRAITS
+  // TRAITS
   // ----------------------------
   getAllTraits() {
-  const set = new Set();
+    const set = new Set();
 
-  const blockedPrefixes = [
-    "marriedTo",
-    "motherOf",
-    "daughterOf",
-    "sonOf",
-    "wifeOf",
-    "husbandOf",
-    "friendOf",
-    "met",
-    "appearedIn",
-    "appearedOn",
-    "knows",
-    "doctorWho",
-  ];
-
-  const blockedExact = new Set([
-    "doctorsGranddaughter",
-    "reverseTimelineRelationship",
-    "girlWhoWaited",
-    "impossibleGirl",
-    "doctorDonna",
-    "badWolfEntity",
-    "metaHumanEvolution",
-    "knowsDoctorsName",
-    "multipleDoctors",
-    "regeneratedRomana"
-  ]);
-
-  for (const c of this.candidates) {
-    for (const t of (c.traits || [])) {
-
-      // already asked
-      if (this.askedTraits.has(t)) continue;
-
-      // block exact junk traits
-      if (blockedExact.has(t)) continue;
-
-      // block prefix-based relational traits
-      if (blockedPrefixes.some(p => t.startsWith(p))) continue;
-
-      // IMPORTANT: only allow traits that can produce a real question
-      if (!this.formatQuestion(t)) continue;
-
-      set.add(t);
+    for (const c of this.candidates) {
+      for (const t of (c.traits || [])) {
+        if (this.askedTraits.has(t)) continue;
+        set.add(t);
+      }
     }
+
+    return [...set];
   }
 
-  return [...set];
-}
-
   // ----------------------------
-  // BEST TRAIT
+  // BEST TRAIT (SAFE)
   // ----------------------------
   getBestTrait() {
     const traits = this.getAllTraits();
+    if (!traits.length) return null;
 
-    let bestTrait = null;
+    let best = null;
     let bestScore = -Infinity;
 
     const phase = this.getPhase();
 
-   for (const trait of traits) {
-  // Skip traits that don't have a human-readable question
-      if (!this.formatQuestion(trait)) continue;
-    
+    for (const trait of traits) {
       if (this.isBadTraitSplit(trait)) continue;
-    
+
       const ig = this.informationGain(trait);
       const weight = this.traitWeight(trait);
 
       let phaseBoost = 1;
-
       if (phase === "early") phaseBoost = 1.2;
       if (phase === "end") phaseBoost = 1.4;
 
       const depthPenalty = 1 - this.getDepth() * 0.5;
 
       const score =
-        ig *
-        (1 + Math.log(weight)) *
-        phaseBoost *
-        depthPenalty;
+        ig * (1 + Math.log(weight + 1)) * phaseBoost * depthPenalty;
 
       if (score > bestScore) {
         bestScore = score;
-        bestTrait = trait;
+        best = trait;
       }
     }
 
-    return bestTrait || this.getFallbackTrait();
+    return best;
   }
 
   // ----------------------------
-  // FALLBACK TRAIT
+  // FALLBACK
   // ----------------------------
   getFallbackTrait() {
     const traits = this.getAllTraits();
+    if (!traits.length) return null;
 
-    let bestTrait = null;
-    let bestSplitScore = -Infinity;
+    let best = null;
+    let bestScore = -Infinity;
 
-    for (const trait of traits) {
-      const { yes, no } = this.splitByTrait(trait);
-      const split = Math.min(yes.length, no.length);
+    for (const t of traits) {
+      const { yes, no } = this.splitByTrait(t);
+      const score = Math.min(yes.length, no.length);
 
-      if (split > bestSplitScore) {
-        bestSplitScore = split;
-        bestTrait = trait;
+      if (score > bestScore) {
+        bestScore = score;
+        best = t;
       }
     }
 
-    return bestTrait;
+    return best;
   }
 
   // ----------------------------
-  // FILTER
+  // FILTER (SAFE)
   // ----------------------------
   filterByTrait(trait, answer) {
     this.askedTraits.add(trait);
@@ -313,10 +222,15 @@ export class AkinatorEngine {
         !c.traits.includes(trait)
       );
     }
+
+    // HARD SAFETY: prevent empty crash
+    if (this.candidates.length === 0) {
+      this.candidates = [...this.allCharacters];
+    }
   }
 
   // ----------------------------
-  // PROBABILITY MODEL
+  // PROBABILITIES (SAFE)
   // ----------------------------
   calculateCandidateScore(candidate) {
     let score = 1;
@@ -328,33 +242,39 @@ export class AkinatorEngine {
     return score;
   }
 
- getProbabilities() {
-  const scores = this.candidates.map(c => ({
-    character: c,
-    score: this.calculateCandidateScore(c)
-  }));
+  getProbabilities() {
+    if (!this.candidates.length) {
+      return [];
+    }
 
-  const total = scores.reduce((sum, s) => sum + s.score, 0);
-
-  if (total <= 0) {
-    return this.candidates.map(c => ({
+    const scores = this.candidates.map(c => ({
       character: c,
-      probability: 1 / this.candidates.length
+      score: this.calculateCandidateScore(c)
+    }));
+
+    const total = scores.reduce((s, x) => s + x.score, 0);
+
+    if (total <= 0) {
+      return this.candidates.map(c => ({
+        character: c,
+        probability: 1 / this.candidates.length
+      }));
+    }
+
+    return scores.map(s => ({
+      character: s.character,
+      probability: s.score / total
     }));
   }
 
-  return scores.map(s => ({
-    character: s.character,
-    probability: s.score / total
-  }));
-}
-
   // ----------------------------
-  // GUESS LOGIC
+  // GUESS SAFETY
   // ----------------------------
   shouldGuess() {
+    if (!this.candidates.length) return false;
+
     const probs = this.getProbabilities();
-    if (probs.length === 0) return false;
+    if (!probs.length) return false;
 
     const best = probs.reduce((a, b) =>
       a.probability > b.probability ? a : b
@@ -373,101 +293,40 @@ export class AkinatorEngine {
 
   guess() {
     const probs = this.getProbabilities();
-    if (probs.length === 0) return null;
+    if (!probs.length) return null;
 
-    return probs.reduce((a, b) =>
+    const best = probs.reduce((a, b) =>
       a.probability > b.probability ? a : b
-    ).character;
+    );
+
+    return best.character || null;
   }
 
   // ----------------------------
-  // QUESTION FORMAT
+  // QUESTION FORMAT (SAFE)
   // ----------------------------
-formatQuestion(trait) {
-  if (!trait) return null;
+  formatQuestion(trait) {
+    if (!trait) return null;
 
-  // ----------------------------
-  // CLEAN OVERRIDES (BEST QUALITY QUESTIONS)
-  // ----------------------------
-  const overrides = {
-    companion: "Is this character a companion?",
-    human: "Is this character human?",
-    alien: "Is this character an alien?",
-    timeLord: "Is this character a Time Lord?",
-    timelord: "Is this character a Time Lord?",
-    immortal: "Is this character immortal?",
-    robotic: "Is this character robotic?",
+    const overrides = {
+      companion: "Is this character a companion?",
+      human: "Is this character human?",
+      alien: "Is this character an alien?",
+      timelord: "Is this character a Time Lord?",
+      immortal: "Is this character immortal?",
+      male: "Is the character male?",
+      female: "Is the character female?"
+    };
 
-    male: "Is the character male?",
-    female: "Is the character female?",
+    if (overrides[trait]) return overrides[trait];
 
-    travelsInTardis: "Has this character traveled in the TARDIS?",
-    associatedWithUNIT: "Is this character associated with UNIT?",
-    torchwoodAgent: "Is this character associated with Torchwood?"
-  };
+    const text = trait
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/_/g, " ")
+      .toLowerCase();
 
-  if (overrides[trait]) return overrides[trait];
-
-  // ----------------------------
-  // NORMALIZE TRAIT TEXT
-  // ----------------------------
-  let text = trait
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/_/g, " ")
-    .toLowerCase();
-
-  // remove junk prefixes
-  text = text
-    .replace(/^is /, "")
-    .replace(/^has /, "")
-    .replace(/^can /, "");
-
-  const lowerTrait = trait.toLowerCase();
-
-  // ----------------------------
-  // ROLE-BASED QUESTIONS
-  // ----------------------------
-  if (
-    lowerTrait.includes("teacher") ||
-    lowerTrait.includes("doctor") ||
-    lowerTrait.includes("scientist") ||
-    lowerTrait.includes("soldier") ||
-    lowerTrait.includes("officer") ||
-    lowerTrait.includes("nurse") ||
-    lowerTrait.includes("student") ||
-    lowerTrait.includes("journalist")
-  ) {
-    return `Is this character a ${text}?`;
+    return `Does this character have the trait: ${text}?`;
   }
-
-  // ----------------------------
-  // AFFILIATION QUESTIONS
-  // ----------------------------
-  if (
-    lowerTrait.includes("associatedwith") ||
-    lowerTrait.includes("partof") ||
-    lowerTrait.includes("unit") ||
-    lowerTrait.includes("torchwood")
-  ) {
-    return `Is this character associated with ${text}?`;
-  }
-
-  // ----------------------------
-  // ACTION / EXPERIENCE TRAITS
-  // ----------------------------
-  if (
-    lowerTrait.includes("travels") ||
-    lowerTrait.includes("uses") ||
-    lowerTrait.includes("has")
-  ) {
-    return `Has this character ${text}?`;
-  }
-
-  // ----------------------------
-  // DEFAULT (SAFE FALLBACK)
-  // ----------------------------
-  return `Does this character have the trait: ${text}?`;
-}
 
   // ----------------------------
   // MAIN LOOP
@@ -485,22 +344,23 @@ formatQuestion(trait) {
       };
     }
 
-    const nextTrait = this.getBestTrait();
+    let trait = this.getBestTrait();
+    if (!trait) trait = this.getFallbackTrait();
 
-    if (!nextTrait || this.candidates.length === 0) {
+    if (!trait) {
       return {
         type: "guess",
-        guess: this.guess(),
+        guess: null,
         remaining: this.candidates
       };
     }
 
-    this.lastTraitAsked = nextTrait;
+    this.lastTraitAsked = trait;
 
     return {
       type: "question",
-      trait: nextTrait,
-      question: this.formatQuestion(nextTrait),
+      trait,
+      question: this.formatQuestion(trait),
       remainingCount: this.candidates.length
     };
   }
