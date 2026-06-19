@@ -1,33 +1,38 @@
 console.log("MAIN JS STARTED");
 
 // ----------------------
-// IMPORTS (MODULE SAFE)
+// IMPORTS
 // ----------------------
-import { AkinatorEngine } from "./engine/akinatorEngine.js";
+import { GuessWhoDoctorWhoEngine } from "./engine/guessWhoDailyEngine.js";
 import data from "./data/mergeData.js";
 
 // ----------------------
-// BOOT ONLY AFTER DOM READY
+// BOOT AFTER DOM READY
 // ----------------------
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM READY");
 
   // ----------------------
-  // INIT ENGINE
+  // INIT ENGINE (DAILY MODE)
   // ----------------------
-  const game = new AkinatorEngine(data);
+  const game = new GuessWhoDoctorWhoEngine(data);
 
   // ----------------------
   // UI ELEMENTS
   // ----------------------
   const chat = document.getElementById("chat");
+  const board = document.getElementById("board"); // <-- ADD THIS IN HTML
 
   if (!chat) {
-    console.error("Missing #chat element in HTML");
+    console.error("Missing #chat element");
     return;
   }
 
-  let currentStep = null;
+  if (!board) {
+    console.error("Missing #board element (character grid)");
+    return;
+  }
+
   let typingBubble = null;
 
   // ----------------------
@@ -52,25 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
     typingBubble.innerText = "Thinking";
 
     const dots = document.createElement("span");
-    dots.id = "dots";
     typingBubble.appendChild(dots);
 
     chat.appendChild(typingBubble);
     chat.scrollTop = chat.scrollHeight;
 
-    animateDots();
-  }
-
-  function animateDots() {
     let count = 0;
-
     const interval = setInterval(() => {
       if (!typingBubble) return clearInterval(interval);
 
       count = (count + 1) % 4;
-      const dots = typingBubble.querySelector("#dots");
-
-      if (dots) dots.innerText = ".".repeat(count);
+      dots.innerText = ".".repeat(count);
     }, 400);
   }
 
@@ -81,70 +78,62 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ----------------------
-  // DELAY
-  // ----------------------
   const wait = (ms) => new Promise(r => setTimeout(r, ms));
 
   // ----------------------
-  // GAME START
+  // RENDER BOARD (CHARACTERS)
   // ----------------------
-  async function startGame() {
-    chat.innerHTML = "";
+  function renderBoard() {
+    board.innerHTML = "";
 
-    addMsg("Think of a Doctor Who character...", "ai");
-    addMsg("I will try to guess who you're thinking of.", "ai");
+    const characters = game.getCharacters();
 
-    currentStep = game.nextStep();
-    await render(currentStep);
+    characters.forEach(name => {
+      const btn = document.createElement("button");
+      btn.className = "char-btn";
+      btn.innerText = name;
+
+      btn.onclick = () => handleGuess(name);
+
+      board.appendChild(btn);
+    });
   }
 
   // ----------------------
-  // RENDER STEP
+  // HANDLE GUESS (CORE GAMEPLAY)
   // ----------------------
-  async function render(step) {
-    if (!step) return;
+  async function handleGuess(name) {
+    addMsg(`I guess: ${name}`, "user");
 
     showTyping();
     await wait(500);
     hideTyping();
 
-    if (step.type === "question") {
-      addMsg(step.question, "ai");
+    const result = game.compareGuess(name);
+
+    if (result.error) {
+      addMsg("Invalid guess.", "ai");
+      return;
     }
 
-    if (step.type === "guess") {
-      addMsg(`Is it ${step.guess.name}?`, "guess");
+    // show feedback
+    if (result.correct) {
+      addMsg(`🎉 Correct! It was ${name}!`, "ai");
+      addMsg(`Game complete in ${game.getStatus().guesses + 1} guesses.`, "ai");
+      return;
     }
-  }
 
-  // ----------------------
-  // PLAYER ANSWERS
-  // ----------------------
-  async function answerYes() {
-    if (!currentStep) return;
+    addMsg(
+      `Matches: ${result.matches.join(", ") || "none"}`,
+      "ai"
+    );
 
-    addMsg("Yes", "user");
+    addMsg(
+      `Wrong traits: ${result.mismatches.join(", ") || "none"}`,
+      "ai"
+    );
 
-    showTyping();
-    await wait(600);
-    hideTyping();
-
-    currentStep = game.nextStep(true);
-    await render(currentStep);
-  }
-
-  async function answerNo() {
-    if (!currentStep) return;
-
-    addMsg("No", "user");
-
-    showTyping();
-    await wait(600);
-    hideTyping();
-
-    currentStep = game.nextStep(false);
-    await render(currentStep);
+    addMsg("Try again 👀", "ai");
   }
 
   // ----------------------
@@ -152,18 +141,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------
   async function resetGame() {
     game.reset();
-    await startGame();
+    chat.innerHTML = "";
+    addMsg("New Daily Doctor Who puzzle started!", "ai");
+    renderBoard();
   }
 
   // ----------------------
-  // EXPOSE TO HTML BUTTONS
+  // EXPOSE BUTTONS
   // ----------------------
-  window.yes = answerYes;
-  window.no = answerNo;
   window.reset = resetGame;
 
   // ----------------------
   // START GAME
   // ----------------------
+  function startGame() {
+    chat.innerHTML = "";
+
+    addMsg("👁 Think of today's Doctor Who target (or just start guessing).", "ai");
+    addMsg("Click a character below to make a guess.", "ai");
+
+    renderBoard();
+  }
+
   startGame();
 });
