@@ -62,7 +62,6 @@
     "mainCompanions": ["Ace", "Mel Bush"],
     "traits": ["doctor", "timelord", "classicWho", "travelsInTardis"]
   },
-  [
 {
 "name": "Eighth Doctor",
 "type": "doctor",
@@ -77,7 +76,7 @@
 "romanticTragicTone",
 "audioEraConnections",
 "preTimeWarDoctor"
-]
+
 },
 {
 "name": "War Doctor",
@@ -94,7 +93,7 @@
 "militaryPersona",
 "guiltDriven",
 "hiddenIncarnation"
-]
+
 },
 {
 "name": "Ninth Doctor",
@@ -111,7 +110,7 @@
 "roseCentricEra",
 "earliestNewWhoDoctor",
 "travelsInTardis"
-]
+
 },
 {
 "name": "Tenth Doctor",
@@ -128,7 +127,7 @@
 "regenerationWithLightning",
 "humanLikePersonality",
 "travelsInTardis"
-]
+
 },
 {
 "name": "Eleventh Doctor",
@@ -145,7 +144,7 @@
 "fairyTaleTone",
 "silurianEraStories",
 "travelsInTardis"
-]
+
 },
 {
 "name": "Twelfth Doctor",
@@ -162,7 +161,7 @@
 "introspectiveTone",
 "questioningMorality",
 "associatedWithUNIT"
-]
+
 },
 {
 "name": "Thirteenth Doctor",
@@ -179,7 +178,7 @@
 "scientificFocusReturn",
 "famEra",
 "explorationTone"
-]
+
 },
 {
 "name": "Fourteenth Doctor",
@@ -195,7 +194,7 @@
 "sharedIdentityWithTenth",
 "emotionalHealingArc",
 "postModernWhoEra"
-]
+
 },
 {
 "name": "Fifteenth Doctor",
@@ -229,8 +228,8 @@
 "divisionOperative",
 "memorySuppressed",
 "blackOpsTimeLord"
-]
+
 }
 ]
 
-]
+
