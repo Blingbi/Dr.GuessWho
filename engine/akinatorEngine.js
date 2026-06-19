@@ -213,22 +213,36 @@ export class AkinatorEngine {
   // QUESTION FORMATTER
   // ----------------------------
   formatQuestion(trait) {
-    const map = {
-      human: "Is this character human?",
-      alien: "Is this character an alien?",
-      timelord: "Is this a Time Lord?",
-      villain: "Is this character a villain?",
-      companion: "Is this character a companion?",
-      doctor: "Is this character a Doctor?",
-      robotic: "Is this character robotic?",
-      immortal: "Is this character immortal?",
-      timeTraveler: "Are they a time traveler?",
-      shapeShifter: "Can they change form?",
-      hiveMind: "Are they part of a hive mind?",
-      associatedWithUNIT: "Are they associated with UNIT?",
-      associatedWithTorchwood: "Are they associated with Torchwood?",
-      quantumLocked: "Are they quantum locked?"
-    };
+    
+  const map = {
+  human: "Is this character human?",
+  alien: "Is this character an alien?",
+  timelord: "Is this a Time Lord?",
+  doctor: "Is this character one of the Doctors?",
+  companion: "Is this character a companion?",
+  villain: "Is this character a villain?",
+
+  male: "Is the character male?",
+  female: "Is the character female?",
+
+  classicWho: "Did this character first appear in Classic Doctor Who?",
+  newWho: "Did this character first appear in Modern Doctor Who?",
+
+  travelsInTardis: "Did this character travel in the TARDIS?",
+  teacher: "Is this character a teacher?",
+  genius: "Is this character considered a genius?",
+  military: "Does this character have a military background?",
+  scientist: "Is this character a scientist?",
+
+  robotic: "Is this character robotic?",
+  immortal: "Is this character immortal?",
+  shapeShifter: "Can this character change appearance?",
+  hiveMind: "Is this character part of a hive mind?",
+  quantumLocked: "Is this character quantum locked?",
+
+  associatedWithUNIT: "Is this character associated with UNIT?",
+  associatedWithTorchwood: "Is this character associated with Torchwood?"
+};
 
     return map[trait] || `Does this character have trait: ${trait}?`;
   }
