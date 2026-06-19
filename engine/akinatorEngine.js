@@ -1,16 +1,18 @@
 export class AkinatorEngine {
   constructor(data) {
-    // ✅ Normalize ALL characters safely
-    this.allCharacters = data.map(c => ({
+  // HARD CLEAN EVERYTHING
+  this.allCharacters = (data || [])
+    .filter(Boolean)
+    .map(c => ({
       ...c,
-      traits: Array.isArray(c.traits) ? c.traits : []
+      traits: Array.isArray(c?.traits) ? c.traits : []
     }));
 
-    this.candidates = [...this.allCharacters];
-    this.askedTraits = new Set();
-    this.lastTraitAsked = null;
+  this.candidates = [...this.allCharacters];
+  this.askedTraits = new Set();
+  this.lastTraitAsked = null;
 
-    this.startCount = this.allCharacters.length;
+  this.startCount = this.allCharacters.length;
 
     // ----------------------------
     // TRAIT FREQUENCY MAP
