@@ -32,12 +32,15 @@ export class AkinatorEngine {
   // ----------------------------
   traitWeight(trait) {
     const weights = {
-      human: 1,
-      alien: 1,
-      timelord: 1,
-      villain: 1,
-      companion: 1,
-      doctor: 1,
+      human: 4,
+      recurring: 5,
+      alien: 4,
+      timelord: 4,
+      villain: 5,
+      companion: 5,
+      doctor: 5,
+      male: 3,
+      female: 3,
 
       robotic: 1.1,
       immortal: 1.8,
@@ -196,7 +199,10 @@ export class AkinatorEngine {
       a.probability > b.probability ? a : b
     );
 
-    return best.probability > 0.75 || this.candidates.length <= 1;
+    return (
+      best.probability > .92 ||
+      this.candidates.length <= 3
+      );
   }
 
   guess() {
