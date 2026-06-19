@@ -1,236 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Doctor Who Daily Guess</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      color: #eaf4ff;
-      background:
-        radial-gradient(circle at top, rgba(40, 120, 255, 0.25), transparent 35%),
-        radial-gradient(circle at bottom, rgba(0, 210, 255, 0.12), transparent 40%),
-        #030916;
-      overflow-x: hidden;
-    }
+<title>Doctor Who Daily Guess</title>
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .app {
-      position: relative;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 28px 16px;
-      text-align: center;
-    }
+body {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #eaf6ff;
+  background:
+    radial-gradient(circle at top, rgba(0, 130, 255, 0.35), transparent 32%),
+    radial-gradient(circle at bottom, rgba(0, 220, 255, 0.12), transparent 42%),
+    #020612;
+  overflow-x: hidden;
+}
 
-    .logo {
-      font-size: 42px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      color: #8fd3ff;
-      text-shadow: 0 0 18px #008cff;
-      margin-bottom: 8px;
-    }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+}
 
-    .subtitle {
-      color: #bddfff;
-      margin-bottom: 24px;
-    }
+.app {
+  position: relative;
+  width: min(100%, 1100px);
+  margin: auto;
+  padding: 16px;
+}
 
-    .tardis-panel {
-      max-width: 620px;
-      margin: 0 auto 24px;
-      padding: 18px;
-      border: 2px solid #69b7ff;
-      border-radius: 14px;
-      background: rgba(5, 16, 40, 0.88);
-      box-shadow: 0 0 28px rgba(0, 145, 255, 0.35);
-    }
+.logo {
+  text-align: center;
+  font-size: clamp(2.2rem, 9vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #8dd4ff;
+  text-shadow:
+    0 0 10px #009dff,
+    0 0 24px #009dff;
+}
 
-    #status {
-      font-weight: bold;
-      margin-bottom: 14px;
-      color: #d8ecff;
-    }
+.subtitle {
+  text-align: center;
+  color: #cfeaff;
+  margin-bottom: 18px;
+}
 
-    .search-row {
-      display: flex;
-      gap: 10px;
-    }
+.control-panel {
+  background: rgba(5, 15, 40, 0.92);
+  border: 2px solid rgba(120, 190, 255, 0.45);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 0 24px rgba(0, 145, 255, 0.32);
+}
 
-    #guessInput {
-      flex: 1;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 2px solid #94cfff;
-      background: #07142b;
-      color: white;
-      outline: none;
-    }
+#status {
+  text-align: center;
+  margin-bottom: 14px;
+  color: #d9efff;
+  font-weight: bold;
+  line-height: 1.4;
+}
 
-    #guessInput:focus {
-      box-shadow: 0 0 16px rgba(0, 170, 255, 0.5);
-    }
+.search-row {
+  display: flex;
+  gap: 10px;
+}
 
-    #submitGuess,
-    #resetBtn {
-      padding: 14px 18px;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      color: white;
-      background: #0b4ea2;
-      box-shadow: 0 0 14px rgba(0, 140, 255, 0.3);
-    }
+#guessInput {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  border: 2px solid #77c7ff;
+  border-radius: 12px;
+  background: #071529;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
 
-    #submitGuess:hover,
-    #resetBtn:hover {
-      background: #1670d6;
-    }
+#guessInput:focus {
+  box-shadow: 0 0 16px rgba(0, 170, 255, 0.55);
+}
 
-    #suggestions {
-      display: grid;
-      gap: 6px;
-      margin-top: 10px;
-    }
+#submitGuess,
+#resetBtn {
+  border: none;
+  border-radius: 12px;
+  padding: 0 20px;
+  min-height: 50px;
+  background: #0756c8;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(0, 140, 255, 0.35);
+}
 
-    .suggestion {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(145, 205, 255, 0.4);
-      background: rgba(20, 50, 100, 0.95);
-      color: white;
-      cursor: pointer;
-      text-align: left;
-    }
+#submitGuess:hover,
+#resetBtn:hover {
+  background: #1678ee;
+}
 
-    .suggestion:hover {
-      background: rgba(35, 90, 170, 0.95);
-    }
+#submitGuess:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin: 18px 0;
-      color: #d5eaff;
-    }
+#suggestions {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
 
-    .legend span {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
+.suggestion {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid rgba(140, 205, 255, 0.35);
+  border-radius: 10px;
+  background: #0d2347;
+  color: white;
+  cursor: pointer;
+}
 
-    .box {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
-      display: inline-block;
-    }
+.suggestion:hover {
+  background: #17396e;
+}
 
-    .green { background: #35b56a; }
-    .yellow { background: #c7b52a; }
-    .red { background: #d83a3a; }
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
 
-    #guesses {
-      display: grid;
-      gap: 14px;
-      margin-top: 22px;
-    }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+}
 
-    .guess-row {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
-      animation: popIn 0.25s ease;
-    }
+.box {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
 
-    .guess-name,
-    .result-card {
-      min-height: 76px;
-      padding: 10px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border: 2px solid rgba(255,255,255,0.2);
-      font-size: 14px;
-    }
+.green { background: #31b96b; }
+.yellow { background: #c9a928; }
+.red { background: #cf3c3c; }
 
-    .guess-name {
-      font-weight: bold;
-    }
+.button-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
 
-    .correct {
-      background: #35a969;
-    }
+.header-row,
+.guess-row {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(5, 1fr);
+  gap: 8px;
+}
 
-    .partial {
-      background: #9c9122;
-    }
+.header-row {
+  margin-bottom: 8px;
+}
 
-    .incorrect {
-      background: #bd3030;
-    }
+.header-cell {
+  padding: 9px;
+  border-radius: 8px;
+  background: rgba(9, 32, 70, 0.95);
+  border: 1px solid rgba(120, 190, 255, 0.3);
+  color: #bfe7ff;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+}
 
-    .field-label {
-      font-size: 11px;
-      opacity: 0.85;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
+#guesses {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 
-    .trait-details {
-      text-align: left;
-      padding: 12px;
-      border-radius: 10px;
-      background: rgba(8, 20, 45, 0.9);
-      border: 1px solid rgba(120, 180, 255, 0.25);
-      color: #d9ecff;
-    }
+.guess-block {
+  animation: popIn 0.22s ease;
+}
 
-    @keyframes popIn {
-      from {
-        transform: scale(0.98);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+.guess-card {
+  min-height: 82px;
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  overflow-wrap: anywhere;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+}
 
-    @media (max-width: 800px) {
-      .guess-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
+.guess-card strong {
+  font-size: 14px;
+}
 
-      .search-row {
-        flex-direction: column;
-      }
+.field-label-mobile {
+  display: none;
+  font-size: 10px;
+  opacity: 0.85;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
 
-      .logo {
-        font-size: 30px;
-      }
-    }
-  </style>
+.correct {
+  background: linear-gradient(180deg, #36c875, #22844b);
+}
+
+.partial {
+  background: linear-gradient(180deg, #d2b72e, #8d7b1f);
+}
+
+.incorrect {
+  background: linear-gradient(180deg, #db4444, #8d2727);
+}
+
+.trait-details {
+  margin-top: 8px;
+  background: rgba(5, 18, 42, 0.95);
+  border: 1px solid rgba(120, 190, 255, 0.25);
+  border-radius: 12px;
+  padding: 12px;
+  color: #d8efff;
+  line-height: 1.45;
+  font-size: 13px;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .app {
+    padding: 14px 10px 70px;
+  }
+
+  .search-row {
+    flex-direction: column;
+  }
+
+  #submitGuess {
+    width: 100%;
+  }
+
+  .header-row {
+    display: none;
+  }
+
+  .guess-row {
+    grid-template-columns: repeat(2, 1fr);
+    background: rgba(0, 0, 0, 0.28);
+    padding: 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(120, 190, 255, 0.18);
+  }
+
+  .guess-card:first-child {
+    grid-column: 1 / -1;
+    min-height: 58px;
+  }
+
+  .guess-card {
+    min-height: 68px;
+    padding: 9px;
+  }
+
+  .field-label-mobile {
+    display: block;
+  }
+
+  .trait-details {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 410px) {
+  .guess-row {
+    grid-template-columns: 1fr;
+  }
+
+  .guess-card:first-child {
+    grid-column: auto;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -238,15 +326,17 @@
     <div class="logo">DOCTOR WHO</div>
     <div class="subtitle">Daily TARDIS Character Guess</div>
 
-    <div class="tardis-panel">
-      <div id="status"></div>
+    <div class="control-panel">
+      <div id="status">Loading Time Vortex...</div>
 
       <div class="search-row">
         <input
           id="guessInput"
-          placeholder="Character name, companion, villain, Doctor..."
+          type="text"
           autocomplete="off"
+          placeholder="Search Doctor, Companion, Villain..."
         />
+
         <button id="submitGuess">Scan</button>
       </div>
 
@@ -254,12 +344,23 @@
     </div>
 
     <div class="legend">
-      <span><i class="box green"></i> Correct</span>
-      <span><i class="box yellow"></i> Partial</span>
-      <span><i class="box red"></i> Incorrect</span>
+      <div class="legend-item"><div class="box green"></div> Correct</div>
+      <div class="legend-item"><div class="box yellow"></div> Partial</div>
+      <div class="legend-item"><div class="box red"></div> Incorrect</div>
     </div>
 
-    <button id="resetBtn">Reset</button>
+    <div class="button-row">
+      <button id="resetBtn">Reset Daily Puzzle</button>
+    </div>
+
+    <div class="header-row">
+      <div class="header-cell">Character</div>
+      <div class="header-cell">Type</div>
+      <div class="header-cell">Era</div>
+      <div class="header-cell">Gender</div>
+      <div class="header-cell">Main Doctor</div>
+      <div class="header-cell">Traits</div>
+    </div>
 
     <div id="guesses"></div>
   </div>
