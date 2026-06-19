@@ -182,18 +182,57 @@ export class AkinatorEngine {
   // ALL TRAITS
   // ----------------------------
   getAllTraits() {
-    const set = new Set();
+  const set = new Set();
 
-    for (const c of this.candidates) {
-      for (const t of c.traits) {
-        if (!this.askedTraits.has(t)) {
-          set.add(t);
-        }
-      }
+  const blockedPrefixes = [
+    "marriedTo",
+    "motherOf",
+    "daughterOf",
+    "sonOf",
+    "wifeOf",
+    "husbandOf",
+    "friendOf",
+    "met",
+    "appearedIn",
+    "appearedOn",
+    "knows",
+    "doctorWho",
+  ];
+
+  const blockedExact = new Set([
+    "doctorsGranddaughter",
+    "reverseTimelineRelationship",
+    "girlWhoWaited",
+    "impossibleGirl",
+    "doctorDonna",
+    "badWolfEntity",
+    "metaHumanEvolution",
+    "knowsDoctorsName",
+    "multipleDoctors",
+    "regeneratedRomana"
+  ]);
+
+  for (const c of this.candidates) {
+    for (const t of (c.traits || [])) {
+
+      // already asked
+      if (this.askedTraits.has(t)) continue;
+
+      // block exact junk traits
+      if (blockedExact.has(t)) continue;
+
+      // block prefix-based relational traits
+      if (blockedPrefixes.some(p => t.startsWith(p))) continue;
+
+      // IMPORTANT: only allow traits that can produce a real question
+      if (!this.formatQuestion(t)) continue;
+
+      set.add(t);
     }
-
-    return [...set];
   }
+
+  return [...set];
+}
 
   // ----------------------------
   // BEST TRAIT
@@ -338,78 +377,84 @@ export class AkinatorEngine {
   // QUESTION FORMAT
   // ----------------------------
   formatQuestion(trait) {
-    const map = {
-    const map = {
-  // Core
-  doctor: "Is this character one of the Doctors?",
-  companion: "Is this character a companion?",
-  villain: "Is this character a villain?",
+  if (!trait) return null;
 
-  // Species
-  human: "Is this character human?",
-  alien: "Is this character an alien?",
-  timelord: "Is this character a Time Lord?",
-  immortal: "Is this character immortal?",
-  robotic: "Is this character robotic?",
+  // Optional override map for best quality questions
+  const overrides = {
+    companion: "Is this character a companion?",
+    human: "Is this character human?",
+    alien: "Is this character an alien?",
+    timeLord: "Is this character a Time Lord?",
+    timelord: "Is this character a Time Lord?",
+    immortal: "Is this character immortal?",
+    robotic: "Is this character robotic?",
 
-  // Gender
-  male: "Is the character male?",
-  female: "Is the character female?",
+    male: "Is the character male?",
+    female: "Is the character female?",
 
-  // Era
-  classicEra: "Is this character primarily from Classic Doctor Who?",
-  modernEra: "Is this character primarily from Modern Doctor Who?",
+    travelsInTardis: "Has this character traveled in the TARDIS?",
+    associatedWithUNIT: "Is this character associated with UNIT?",
+    torchwoodAgent: "Is this character associated with Torchwood?"
+  };
 
-  // Travel
-  traveledInTARDIS: "Has this character traveled in the TARDIS?",
-  frequentTraveler: "Has this character traveled with the Doctor for an extended period?",
+  if (overrides[trait]) return overrides[trait];
 
-  // Organizations
-  associatedWithUNIT: "Is this character associated with UNIT?",
-  associatedWithTorchwood: "Is this character associated with Torchwood?",
-  associatedWithGallifrey: "Is this character associated with Gallifrey?",
+  // ----------------------------
+  // AUTO-GENERATION LOGIC
+  // ----------------------------
 
-  // Occupation
-  teacher: "Is this character a teacher?",
-  scientist: "Is this character a scientist?",
-  doctorProfession: "Is this character a medical doctor?",
-  journalist: "Is this character a journalist?",
-  policeOfficer: "Does this character work in law enforcement?",
-  soldier: "Is this character a soldier?",
-  politician: "Is this character involved in politics?",
+  let text = trait;
 
-  // Time period
-  fromPast: "Does this character primarily come from the past?",
-  fromPresent: "Does this character primarily come from the present day?",
-  fromFuture: "Does this character primarily come from the future?",
+  // split camelCase / PascalCase
+  text = text
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/_/g, " ")
+    .toLowerCase();
 
-  // Companion-specific
-  married: "Is this character married?",
-  parent: "Is this character a parent?",
-  teenager: "Is this character a teenager?",
-  child: "Is this character a child?",
+  // cleanup prefixes
+  text = text
+    .replace(/^is /, "")
+    .replace(/^has /, "")
+    .replace(/^can /, "");
 
-  // Villain-specific
-  recurringVillain: "Is this a recurring villain?",
-  leader: "Is this character a leader of a group or species?",
-  conqueror: "Does this character seek conquest or domination?",
+  // convert common patterns
+  const negative = [
+    "not",
+    "no",
+    "never"
+  ];
 
-  // Alien features
-  shapeShifter: "Can this character change appearance?",
-  hiveMind: "Is this character part of a hive mind?",
-  quantumLocked: "Is this character quantum locked?",
+  const isNegative = negative.some(n => trait.toLowerCase().includes(n));
 
-  // Doctor-specific
-  regenerated: "Has this character regenerated?",
-  usesSonic: "Has this character used a sonic device?",
-
-  // Importance
-  recurring: "Is this character recurring across multiple stories?",
-  majorCharacter: "Is this considered a major Doctor Who character?"
-};
-
-    rreturn map[trait] || null;
+  // basic grammar shaping
+  if (
+    trait.toLowerCase().includes("teacher") ||
+    trait.toLowerCase().includes("doctor") ||
+    trait.toLowerCase().includes("scientist") ||
+    trait.toLowerCase().includes("soldier") ||
+    trait.toLowerCase().includes("officer")
+  ) {
+    return `Is this character a ${text}?`;
   }
+
+  if (
+    trait.toLowerCase().includes("associatedwith") ||
+    trait.toLowerCase().includes("partof")
+  ) {
+    return `Is this character associated with ${text.replace("associated with", "")}?`;
+  }
+
+  if (
+    trait.toLowerCase().includes("travels") ||
+    trait.toLowerCase().includes("uses") ||
+    trait.toLowerCase().includes("has")
+  ) {
+    return `Has this character ${text}?`;
+  }
+
+  // default fallback
+  return `Does this character have the trait: ${text}?`;
+}
 
   // ----------------------------
   // MAIN LOOP
