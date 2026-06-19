@@ -1,167 +1,128 @@
 console.log("MAIN JS STARTED");
 
-// ----------------------
-// IMPORTS
-// ----------------------
-import { GuessWhoDoctorWhoEngine } from "./engine/guessWhoDailyEngine.js";
+import { GuessWhoDoctorWhoEngine } from "./engine/guessWhoDoctorWhoEngine.js";
 import data from "./data/mergeData.js";
 
-// ----------------------
-// BOOT AFTER DOM READY
-// ----------------------
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM READY");
-
-  // ----------------------
-  // INIT ENGINE (DAILY MODE)
-  // ----------------------
   const game = new GuessWhoDoctorWhoEngine(data);
 
-  // ----------------------
-  // UI ELEMENTS
-  // ----------------------
-  const chat = document.getElementById("chat");
-  const board = document.getElementById("board"); // <-- ADD THIS IN HTML
+  const input = document.getElementById("guessInput");
+  const submitBtn = document.getElementById("submitGuess");
+  const guesses = document.getElementById("guesses");
+  const status = document.getElementById("status");
+  const suggestions = document.getElementById("suggestions");
+  const resetBtn = document.getElementById("resetBtn");
 
-  if (!chat) {
-    console.error("Missing #chat element");
-    return;
+  function titleCase(text) {
+    return String(text || "Unknown")
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, c => c.toUpperCase());
   }
 
-  if (!board) {
-    console.error("Missing #board element (character grid)");
-    return;
+  function setStatus(text) {
+    status.textContent = text;
   }
 
-  let typingBubble = null;
+  function renderSuggestions() {
+    suggestions.innerHTML = "";
 
-  // ----------------------
-  // CHAT HELPERS
-  // ----------------------
-  function addMsg(text, type = "ai") {
-    const div = document.createElement("div");
-    div.className = `msg ${type}`;
-    div.innerText = text;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
+    const value = input.value.trim();
+    if (!value) return;
 
-  // ----------------------
-  // TYPING INDICATOR
-  // ----------------------
-  function showTyping() {
-    hideTyping();
+    const matches = game.getSuggestions(value);
 
-    typingBubble = document.createElement("div");
-    typingBubble.className = "msg ai";
-    typingBubble.innerText = "Thinking";
-
-    const dots = document.createElement("span");
-    typingBubble.appendChild(dots);
-
-    chat.appendChild(typingBubble);
-    chat.scrollTop = chat.scrollHeight;
-
-    let count = 0;
-    const interval = setInterval(() => {
-      if (!typingBubble) return clearInterval(interval);
-
-      count = (count + 1) % 4;
-      dots.innerText = ".".repeat(count);
-    }, 400);
-  }
-
-  function hideTyping() {
-    if (typingBubble) {
-      typingBubble.remove();
-      typingBubble = null;
-    }
-  }
-
-  const wait = (ms) => new Promise(r => setTimeout(r, ms));
-
-  // ----------------------
-  // RENDER BOARD (CHARACTERS)
-  // ----------------------
-  function renderBoard() {
-    board.innerHTML = "";
-
-    const characters = game.getCharacters();
-
-    characters.forEach(name => {
+    matches.forEach(character => {
       const btn = document.createElement("button");
-      btn.className = "char-btn";
-      btn.innerText = name;
+      btn.className = "suggestion";
+      btn.textContent = character.name;
 
-      btn.onclick = () => handleGuess(name);
+      btn.onclick = () => {
+        input.value = character.name;
+        suggestions.innerHTML = "";
+      };
 
-      board.appendChild(btn);
+      suggestions.appendChild(btn);
     });
   }
 
-  // ----------------------
-  // HANDLE GUESS (CORE GAMEPLAY)
-  // ----------------------
-  async function handleGuess(name) {
-    addMsg(`I guess: ${name}`, "user");
+  function renderGuess(result) {
+    const row = document.createElement("div");
+    row.className = "guess-row";
 
-    showTyping();
-    await wait(500);
-    hideTyping();
+    const nameCard = document.createElement("div");
+    nameCard.className = result.correct ? "guess-name correct" : "guess-name incorrect";
+    nameCard.textContent = result.guess.name;
+    row.appendChild(nameCard);
+
+    result.fields.slice(1).forEach(field => {
+      const card = document.createElement("div");
+      card.className = `result-card ${field.state}`;
+      card.innerHTML = `
+        <span class="field-label">${field.label}</span>
+        <strong>${titleCase(field.guessValue)}</strong>
+      `;
+      row.appendChild(card);
+    });
+
+    guesses.prepend(row);
+
+    const traitBox = document.createElement("div");
+    traitBox.className = "trait-details";
+
+    traitBox.innerHTML = `
+      <strong>Matching traits:</strong>
+      ${result.matchingTraits.length ? result.matchingTraits.map(titleCase).join(", ") : "None"}
+    `;
+
+    guesses.prepend(traitBox);
+  }
+
+  function submitGuess() {
+    const name = input.value.trim();
+
+    if (!name) {
+      setStatus("Type a Doctor Who character first.");
+      return;
+    }
 
     const result = game.compareGuess(name);
 
     if (result.error) {
-      addMsg("Invalid guess.", "ai");
+      setStatus("Character not found. Try choosing from the suggestions.");
       return;
     }
 
-    // show feedback
+    renderGuess(result);
+    input.value = "";
+    suggestions.innerHTML = "";
+
     if (result.correct) {
-      addMsg(`🎉 Correct! It was ${name}!`, "ai");
-      addMsg(`Game complete in ${game.getStatus().guesses + 1} guesses.`, "ai");
-      return;
+      setStatus(`🎉 Correct! You found today's character in ${game.getGuessCount()} guesses.`);
+      input.disabled = true;
+      submitBtn.disabled = true;
+    } else {
+      setStatus(`Guess ${game.getGuessCount()} submitted. Keep scanning the vortex.`);
     }
-
-    addMsg(
-      `Matches: ${result.matches.join(", ") || "none"}`,
-      "ai"
-    );
-
-    addMsg(
-      `Wrong traits: ${result.mismatches.join(", ") || "none"}`,
-      "ai"
-    );
-
-    addMsg("Try again 👀", "ai");
   }
 
-  // ----------------------
-  // RESET GAME
-  // ----------------------
-  async function resetGame() {
+  function resetGame() {
     game.reset();
-    chat.innerHTML = "";
-    addMsg("New Daily Doctor Who puzzle started!", "ai");
-    renderBoard();
+    guesses.innerHTML = "";
+    input.disabled = false;
+    submitBtn.disabled = false;
+    input.value = "";
+    suggestions.innerHTML = "";
+    setStatus("Guess today's Doctor Who character.");
   }
 
-  // ----------------------
-  // EXPOSE BUTTONS
-  // ----------------------
-  window.reset = resetGame;
+  input.addEventListener("input", renderSuggestions);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") submitGuess();
+  });
 
-  // ----------------------
-  // START GAME
-  // ----------------------
-  function startGame() {
-    chat.innerHTML = "";
+  submitBtn.addEventListener("click", submitGuess);
+  resetBtn.addEventListener("click", resetGame);
 
-    addMsg("👁 Think of today's Doctor Who target (or just start guessing).", "ai");
-    addMsg("Click a character below to make a guess.", "ai");
-
-    renderBoard();
-  }
-
-  startGame();
+  setStatus("Guess today's Doctor Who character.");
 });
