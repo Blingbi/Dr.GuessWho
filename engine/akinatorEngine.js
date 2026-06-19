@@ -7,6 +7,14 @@ export class AkinatorEngine {
 
     this.startCount = data.length;
 
+    this.traitFrequency = new Map();
+
+    for (const c of data) {
+      for (const t of c.traits) {
+        this.traitFrequency.set(t, (this.traitFrequency.get(t) || 0) + 1);
+      }
+    }
+
     // ----------------------------
     // TRAIT INDEX (FAST LOOKUP)
     // ----------------------------
@@ -43,34 +51,29 @@ export class AkinatorEngine {
   // ----------------------------
   // TRAIT WEIGHTS
   // ----------------------------
-  traitWeight(trait) {
-    const weights = {
-      human: 4,
-      alien: 4,
-      timelord: 4,
-      villain: 5,
-      companion: 5,
-      doctor: 5,
-      male: 3,
-      female: 3,
+traitWeight(trait) {
+  const baseWeights = {
+    villain: 5,
+    companion: 5,
+    doctor: 5,
 
-      robotic: 1.2,
-      immortal: 1.8,
-      timeTraveler: 1.3,
+    human: 3,
+    alien: 3,
 
-      associatedWithUNIT: 1.2,
-      associatedWithTorchwood: 1.2,
+    timelord: 3.5,
+    immortal: 2,
 
-      shapeShifter: 1.6,
-      hiveMind: 1.6,
+    male: 2,
+    female: 2
+  };
 
-      cosmicEntity: 2.2,
-      quantumLocked: 2.0,
-      memoryWipe: 1.7
-    };
+  const base = baseWeights[trait] || 1;
 
-    return weights[trait] || 1;
-  }
+  const freq = this.traitFrequency.get(trait) || 1;
+  const rarityBoost = 1 / Math.log2(freq + 1);
+
+  return base * (1 + rarityBoost);
+}
 
   // ----------------------------
   // SPLIT BY TRAIT (FAST VERSION)
@@ -88,27 +91,41 @@ export class AkinatorEngine {
 
     return { yes, no };
   }
+  isBadTraitSplit(trait) {
+  const { yes, no } = this.splitByTrait(trait);
+
+  const ratio = yes.length / (no.length + 1);
+
+  return ratio < 0.15 || ratio > 0.85;
+}
 
   // ----------------------------
   // ENTROPY (FIXED)
   // ----------------------------
-  informationGain(trait) {
-    const total = this.candidates.length;
-    if (total <= 1) return 0;
+informationGain(trait) {
+  const total = this.candidates.length;
+  if (total <= 1) return 0;
 
-    const { yes, no } = this.splitByTrait(trait);
+  let yes = 0;
 
-    const entropy = (arr) => {
-      const p = arr.length / total;
-      if (p === 0) return 0;
-      return -p * Math.log2(p);
-    };
-
-    const before = Math.log2(total);
-    const after = entropy(yes) + entropy(no);
-
-    return before - after;
+  for (const c of this.candidates) {
+    if (c.traits.includes(trait)) yes++;
   }
+
+  const no = total - yes;
+
+  if (yes === 0 || no === 0) return 0;
+
+  const pYes = yes / total;
+  const pNo = no / total;
+
+  const entropyBefore = Math.log2(total);
+  const entropyAfter =
+    -pYes * Math.log2(pYes) -
+    -pNo * Math.log2(pNo);
+
+  return entropyBefore - entropyAfter;
+}
 
   // ----------------------------
   // GET ALL POSSIBLE TRAITS
@@ -138,7 +155,8 @@ export class AkinatorEngine {
 
     const depth = this.getDepth();
 
-    for (const trait of traits) {
+   for (const trait of traits) {
+      if (this.isBadTraitSplit(trait)) continue;
       const ig = this.informationGain(trait);
       const weight = this.traitWeight(trait);
 
