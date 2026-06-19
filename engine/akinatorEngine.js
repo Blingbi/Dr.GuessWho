@@ -206,9 +206,12 @@ export class AkinatorEngine {
 
     const phase = this.getPhase();
 
-    for (const trait of traits) {
+   for (const trait of traits) {
+  // Skip traits that don't have a human-readable question
+      if (!this.formatQuestion(trait)) continue;
+    
       if (this.isBadTraitSplit(trait)) continue;
-
+    
       const ig = this.informationGain(trait);
       const weight = this.traitWeight(trait);
 
@@ -336,27 +339,76 @@ export class AkinatorEngine {
   // ----------------------------
   formatQuestion(trait) {
     const map = {
-      human: "Is this character human?",
-      alien: "Is this character an alien?",
-      timelord: "Is this a Time Lord?",
-      doctor: "Is this character one of the Doctors?",
-      companion: "Is this character a companion?",
-      villain: "Is this character a villain?",
+    const map = {
+  // Core
+  doctor: "Is this character one of the Doctors?",
+  companion: "Is this character a companion?",
+  villain: "Is this character a villain?",
 
-      male: "Is the character male?",
-      female: "Is the character female?",
+  // Species
+  human: "Is this character human?",
+  alien: "Is this character an alien?",
+  timelord: "Is this character a Time Lord?",
+  immortal: "Is this character immortal?",
+  robotic: "Is this character robotic?",
 
-      robotic: "Is this character robotic?",
-      immortal: "Is this character immortal?",
-      shapeShifter: "Can this character change appearance?",
-      hiveMind: "Is this character part of a hive mind?",
-      quantumLocked: "Is this character quantum locked?",
+  // Gender
+  male: "Is the character male?",
+  female: "Is the character female?",
 
-      associatedWithUNIT: "Is this character associated with UNIT?",
-      associatedWithTorchwood: "Is this character associated with Torchwood?"
-    };
+  // Era
+  classicEra: "Is this character primarily from Classic Doctor Who?",
+  modernEra: "Is this character primarily from Modern Doctor Who?",
 
-    return map[trait] || `Does this character have trait: ${trait}?`;
+  // Travel
+  traveledInTARDIS: "Has this character traveled in the TARDIS?",
+  frequentTraveler: "Has this character traveled with the Doctor for an extended period?",
+
+  // Organizations
+  associatedWithUNIT: "Is this character associated with UNIT?",
+  associatedWithTorchwood: "Is this character associated with Torchwood?",
+  associatedWithGallifrey: "Is this character associated with Gallifrey?",
+
+  // Occupation
+  teacher: "Is this character a teacher?",
+  scientist: "Is this character a scientist?",
+  doctorProfession: "Is this character a medical doctor?",
+  journalist: "Is this character a journalist?",
+  policeOfficer: "Does this character work in law enforcement?",
+  soldier: "Is this character a soldier?",
+  politician: "Is this character involved in politics?",
+
+  // Time period
+  fromPast: "Does this character primarily come from the past?",
+  fromPresent: "Does this character primarily come from the present day?",
+  fromFuture: "Does this character primarily come from the future?",
+
+  // Companion-specific
+  married: "Is this character married?",
+  parent: "Is this character a parent?",
+  teenager: "Is this character a teenager?",
+  child: "Is this character a child?",
+
+  // Villain-specific
+  recurringVillain: "Is this a recurring villain?",
+  leader: "Is this character a leader of a group or species?",
+  conqueror: "Does this character seek conquest or domination?",
+
+  // Alien features
+  shapeShifter: "Can this character change appearance?",
+  hiveMind: "Is this character part of a hive mind?",
+  quantumLocked: "Is this character quantum locked?",
+
+  // Doctor-specific
+  regenerated: "Has this character regenerated?",
+  usesSonic: "Has this character used a sonic device?",
+
+  // Importance
+  recurring: "Is this character recurring across multiple stories?",
+  majorCharacter: "Is this considered a major Doctor Who character?"
+};
+
+    rreturn map[trait] || null;
   }
 
   // ----------------------------
