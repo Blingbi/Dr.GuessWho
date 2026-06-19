@@ -1,12 +1,19 @@
 export class AkinatorEngine {
-  constructor(data) {
-  // HARD CLEAN EVERYTHING
-  this.allCharacters = (data || [])
-    .filter(Boolean)
-    .map(c => ({
-      ...c,
-      traits: Array.isArray(c?.traits) ? c.traits : []
-    }));
+ constructor(data) {
+  // ----------------------------
+  // CLEAN INPUT DATA
+  // ----------------------------
+  this.allCharacters = Array.isArray(data)
+    ? data
+        .filter(c => c && typeof c === "object")
+        .map(c => ({
+          ...c,
+          name: typeof c.name === "string" ? c.name : "Unknown",
+          traits: Array.isArray(c.traits)
+            ? c.traits.filter(t => typeof t === "string")
+            : []
+        }))
+    : [];
 
   this.candidates = [...this.allCharacters];
   this.askedTraits = new Set();
@@ -14,32 +21,56 @@ export class AkinatorEngine {
 
   this.startCount = this.allCharacters.length;
 
-    // ----------------------------
-    // TRAIT FREQUENCY MAP
-    // ----------------------------
-    this.traitFrequency = new Map();
+  // ----------------------------
+  // TRAIT FREQUENCY MAP
+  // ----------------------------
+  this.traitFrequency = new Map();
 
-    for (const c of this.allCharacters) {
-      for (const t of c.traits) {
-        this.traitFrequency.set(t, (this.traitFrequency.get(t) || 0) + 1);
-      }
-    }
+  for (const c of this.allCharacters) {
+    const traits = Array.isArray(c?.traits) ? c.traits : [];
 
-    // ----------------------------
-    // TRAIT INDEX (FAST LOOKUP)
-    // ----------------------------
-    this.traitIndex = new Map();
-
-    for (const c of this.allCharacters) {
-      for (const t of c.traits) {
-        if (!this.traitIndex.has(t)) {
-          this.traitIndex.set(t, new Set());
-        }
-        // store NAME instead of object (more stable)
-        this.traitIndex.get(t).add(c.name);
-      }
+    for (const t of traits) {
+      this.traitFrequency.set(
+        t,
+        (this.traitFrequency.get(t) || 0) + 1
+      );
     }
   }
+
+  // ----------------------------
+  // TRAIT INDEX
+  // ----------------------------
+  this.traitIndex = new Map();
+
+  for (const c of this.allCharacters) {
+    const traits = Array.isArray(c?.traits) ? c.traits : [];
+
+    for (const t of traits) {
+      if (!this.traitIndex.has(t)) {
+        this.traitIndex.set(t, new Set());
+      }
+
+      this.traitIndex.get(t).add(c.name);
+    }
+  }
+
+  // ----------------------------
+  // DEBUG OUTPUT
+  // ----------------------------
+  console.log(
+    "Akinator loaded",
+    this.allCharacters.length,
+    "characters"
+  );
+
+  const badCharacters = this.allCharacters.filter(
+    c => !Array.isArray(c.traits)
+  );
+
+  if (badCharacters.length) {
+    console.warn("Bad characters found:", badCharacters);
+  }
+}
 
   // ----------------------------
   // GAME PHASE
