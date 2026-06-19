@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Who Akinator</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #0b1a2a, #000);
+      color: #e6f1ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ---------------- TARDIS INTRO ---------------- */
+    .intro {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+      animation: fadeOut 2s ease 2.5s forwards;
+    }
+
+    .tardis {
+      width: 120px;
+      height: 180px;
+      background: linear-gradient(180deg, #1c3f66, #0b1a2a);
+      border: 2px solid #4fc3ff;
+      box-shadow: 0 0 30px #4fc3ff88;
+      animation: zoomIn 2s ease;
+      position: relative;
+    }
+
+    .tardis::before {
+      content: "POLICE BOX";
+      position: absolute;
+      top: 6px;
+      width: 100%;
+      text-align: center;
+      font-size: 9px;
+      color: #bfe9ff;
+      letter-spacing: 2px;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.2); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* ---------------- MAIN LAYOUT ---------------- */
+    .app {
+      width: 100%;
+      max-width: 700px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #7fd1ff;
+      margin: 0 0 10px 0;
+      font-size: 1.8rem;
+    }
+
+    /* ---------------- CHAT BOX ---------------- */
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 80%;
+      line-height: 1.3;
+      animation: pop 0.2s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .ai {
+      background: #1c3f66;
+      align-self: flex-start;
+      border: 1px solid #4fc3ff44;
+    }
+
+    .user {
+      background: #2ecc71;
+      color: #000;
+      align-self: flex-end;
+    }
+
+    .guess {
+      background: #f1c40f;
+      color: #000;
+      align-self: center;
+      font-weight: bold;
+    }
+
+    /* ---------------- CONTROLS ---------------- */
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .yes { background: #2ecc71; }
+    .no { background: #e74c3c; }
+    .reset { background: #3498db; }
+
+    /* scroll bar */
+    .chat::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat::-webkit-scrollbar-thumb {
+      background: #4fc3ff55;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TARDIS INTRO -->
+  <div class="intro">
+    <div class="tardis"></div>
+  </div>
+
+  <!-- APP -->
+  <div class="app">
+
+    <h1>Doctor Who Akinator</h1>
+
+    <div id="chat" class="chat"></div>
+
+    <div class="controls">
+      <button class="yes" onclick="yes()">Yes</button>
+      <button class="no" onclick="no()">No</button>
+      <button class="reset" onclick="reset()">Restart</button>
+    </div>
+
+  </div>
+
+  <script type="module" src="./main.js"></script>
+
+  <script>
+    // smooth intro removal cleanup
+    setTimeout(() => {
+      document.querySelector('.intro').remove();
+    }, 3000);
+  </script>
+
+</body>
+</html>
