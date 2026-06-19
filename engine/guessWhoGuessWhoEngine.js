@@ -1,28 +1,22 @@
 export class GuessWhoDoctorWhoEngine {
   constructor(data) {
-    // ----------------------------
-    // CLEAN DATA
-    // ----------------------------
     this.allCharacters = Array.isArray(data)
       ? data
           .filter(c => c && typeof c === "object")
           .map(c => ({
-            name: typeof c.name === "string" ? c.name : "Unknown",
+            name: c.name || "Unknown",
+            type: c.type || "unknown",
+            era: c.era || "unknown",
+            gender: c.gender || "unknown",
+            mainCompanionOf: c.mainCompanionOf || "",
             traits: Array.isArray(c.traits) ? c.traits : []
           }))
       : [];
 
-    // ----------------------------
-    // GAME STATE
-    // ----------------------------
     this.secretCharacter = this.pickDailyCharacter();
     this.guessHistory = [];
-    this.activeFilters = new Set();
   }
 
-  // =========================================================
-  // DAILY CHARACTER SYSTEM (ONE PUZZLE PER DAY)
-  // =========================================================
   getDailyId() {
     const d = new Date();
     return `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`;
@@ -30,70 +24,118 @@ export class GuessWhoDoctorWhoEngine {
 
   hashString(str) {
     let hash = 0;
+
     for (let i = 0; i < str.length; i++) {
       hash = (hash << 5) - hash + str.charCodeAt(i);
       hash |= 0;
     }
+
     return Math.abs(hash);
   }
 
   pickDailyCharacter() {
     if (!this.allCharacters.length) return null;
 
-    const seed = this.getDailyId();
-    const hash = this.hashString(seed);
-
+    const hash = this.hashString(this.getDailyId());
     const index = hash % this.allCharacters.length;
 
     return this.allCharacters[index];
   }
 
   reset() {
-    this.guessHistory = [];
-    this.activeFilters = new Set();
     this.secretCharacter = this.pickDailyCharacter();
+    this.guessHistory = [];
   }
 
-  // =========================================================
-  // GUESS SYSTEM (SEARCH BAR LIKE YOUR IMAGE)
-  // =========================================================
-  compareGuess(name) {
-    const guess = this.allCharacters.find(
-      c => c.name.toLowerCase() === name.toLowerCase()
+  normalizeText(text) {
+    return String(text || "").trim().toLowerCase();
+  }
+
+  findCharacter(name) {
+    const target = this.normalizeText(name);
+
+    return this.allCharacters.find(c =>
+      this.normalizeText(c.name) === target
     );
+  }
+
+  getCharacters() {
+    return this.allCharacters;
+  }
+
+  getCharacterNames() {
+    return this.allCharacters.map(c => c.name);
+  }
+
+  getHistory() {
+    return this.guessHistory;
+  }
+
+  getGuessCount() {
+    return this.guessHistory.length;
+  }
+
+  compareField(label, guessValue, secretValue) {
+    const guess = this.normalizeText(guessValue);
+    const secret = this.normalizeText(secretValue);
+
+    return {
+      label,
+      guessValue: guessValue || "Unknown",
+      state: guess === secret ? "correct" : "incorrect"
+    };
+  }
+
+  compareGuess(name) {
+    const guess = this.findCharacter(name);
 
     if (!guess || !this.secretCharacter) {
-      return { error: "Invalid character" };
+      return {
+        error: "Character not found."
+      };
     }
 
-    const secretTraits = new Set(this.secretCharacter.traits);
+    const secret = this.secretCharacter;
+
     const guessTraits = new Set(guess.traits);
+    const secretTraits = new Set(secret.traits);
 
-    const matches = [];
-    const mismatches = [];
-    const missing = [];
+    const matchingTraits = guess.traits.filter(t => secretTraits.has(t));
+    const wrongTraits = guess.traits.filter(t => !secretTraits.has(t));
+    const missingTraits = secret.traits.filter(t => !guessTraits.has(t));
 
-    for (const t of guessTraits) {
-      if (secretTraits.has(t)) matches.push(t);
-      else mismatches.push(t);
-    }
+    const fields = [
+      this.compareField("Character", guess.name, secret.name),
+      this.compareField("Type", guess.type, secret.type),
+      this.compareField("Era", guess.era, secret.era),
+      this.compareField("Gender", guess.gender, secret.gender),
+      this.compareField("Main Doctor", guess.mainCompanionOf, secret.mainCompanionOf)
+    ];
 
-    for (const t of secretTraits) {
-      if (!guessTraits.has(t)) missing.push(t);
-    }
+    const traitScore =
+      matchingTraits.length / Math.max(secret.traits.length, 1);
 
-    const correct = guess.name === this.secretCharacter.name;
+    let traitState = "incorrect";
+    if (traitScore >= 0.75) traitState = "correct";
+    else if (traitScore > 0) traitState = "partial";
 
-    const score =
-      matches.length / Math.max(secretTraits.size, 1);
+    fields.push({
+      label: "Traits",
+      guessValue: `${matchingTraits.length} matching`,
+      state: traitState
+    });
+
+    const correct =
+      this.normalizeText(guess.name) === this.normalizeText(secret.name);
 
     const result = {
-      guess: guess.name,
-      matches,
-      mismatches,
-      missing,
-      score,
-      correct
+      guess,
+      correct,
+      fields,
+      matchingTraits,
+      wrongTraits,
+      missingTraits,
+      score: traitScore
     };
 
     this.guessHistory.push(result);
@@ -101,94 +143,17 @@ export class GuessWhoDoctorWhoEngine {
     return result;
   }
 
-  // =========================================================
-  // TRAIT FILTER SYSTEM (CORE OF YOUR UI)
-  // =========================================================
+  getSuggestions(query) {
+    const q = this.normalizeText(query);
 
-  toggleTrait(trait) {
-    if (this.activeFilters.has(trait)) {
-      this.activeFilters.delete(trait);
-    } else {
-      this.activeFilters.add(trait);
-    }
-  }
+    if (!q) return [];
 
-  clearFilters() {
-    this.activeFilters.clear();
-  }
-
-  getActiveFilters() {
-    return [...this.activeFilters];
-  }
-
-  // =========================================================
-  // FILTERED BOARD (WHAT SHOWS ON SCREEN)
-  // =========================================================
-  getFilteredCharacters() {
-    const filters = [...this.activeFilters];
-
-    if (filters.length === 0) {
-      return this.allCharacters;
-    }
-
-    return this.allCharacters.filter(c =>
-      filters.every(f => c.traits.includes(f))
-    );
-  }
-
-  // =========================================================
-  // CHARACTER STATE (GREEN / RED LOGIC LIKE YOUR IMAGE)
-  // =========================================================
-  getCharacterState(character) {
-    const filters = [...this.activeFilters];
-
-    if (filters.length === 0) return "neutral";
-
-    const hasAll = filters.every(f =>
-      character.traits.includes(f)
-    );
-
-    return hasAll ? "match" : "eliminated";
-  }
-
-  // =========================================================
-  // WIN CONDITION CHECK
-  // =========================================================
-  isCorrectGuess(name) {
-    return (
-      this.secretCharacter &&
-      name.toLowerCase() === this.secretCharacter.name.toLowerCase()
-    );
-  }
-
-  // =========================================================
-  // HINT SYSTEM (OPTIONAL LIKE YOUR IMAGE PANEL)
-  // =========================================================
-  getHint() {
-    if (!this.secretCharacter) return null;
-
-    const traits = this.secretCharacter.traits;
-    if (!traits.length) return null;
-
-    return traits[Math.floor(Math.random() * traits.length)];
-  }
-
-  // =========================================================
-  // UI HELPERS
-  // =========================================================
-  getCharacters() {
-    return this.allCharacters.map(c => c.name);
-  }
-
-  getRemainingCount() {
-    return this.getFilteredCharacters().length;
+    return this.allCharacters
+      .filter(c => this.normalizeText(c.name).includes(q))
+      .slice(0, 8);
   }
 
   getSecretForDebug() {
     return this.secretCharacter;
-  }
-
-  getHistory() {
-    return this.guessHistory;
   }
 }
