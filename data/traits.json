@@ -1,9 +1,29 @@
 {
-  "identityTraits": [
+  "coreTraits": [
     "doctor",
     "companion",
     "villain",
-    "recurringCharacter"
+    "recurring",
+
+    "timelord",
+    "human",
+    "alien",
+    "robotic",
+    "immortal",
+
+    "male",
+    "female",
+    "nonBinary",
+
+    "classicWho",
+    "newWho",
+
+    "frequentTARDISTravel",
+    "occasionalTARDISTravel",
+
+    "associatedWithUNIT",
+    "associatedWithTorchwood",
+    "timeTraveler"
   ],
 
   "speciesTraits": [
@@ -21,6 +41,7 @@
     "nonHumanIntelligence",
     "abstractEntity"
   ],
+  
 
   "organizationTraits": [
     "UNIT",
@@ -29,15 +50,15 @@
     "PaternosterGang"
   ],
 
-  "mechanicTraits": [
+  "abilityTraits": [
     "regenerates",
-    "timeTravelCapability",
+    "shapeShifter",
     "telepathic",
-    "shapeShifting",
+    "timeLocked",
     "hiveMind",
-    "memoryManipulation",
-    "immortal",
-    "timeLocked"
+    "memoryWipe",
+    "quantumLocked",
+    "cosmicEntity"
   ],
 
   "roleTraits": [
@@ -53,21 +74,29 @@
     "civilian"
   ],
 
-  "loreTraits": [
+  "storyTraits": [
     "foughtTimeWar",
-    "destroyedGallifrey",
     "createdDaleks",
+    "partOfProphecy",
+    "destroyedGallifrey",
     "lastOfSpecies",
-    "partOfProphecy"
+    "leader",
+    "scientist",
+    "soldier",
+    "politician",
+    "militaryBackground"
   ],
 
-  "doctorTraits": [
+  "doctorSpecificTraits": [
+    "biGenerated",
     "warDoctor",
     "fugitiveDoctor",
-    "biGenerated",
-    "usesSonicScrewdriver",
+    "usesSonic",
     "wearsBowTie",
     "wearsScarf",
-    "playsGuitar"
+    "playsGuitar",
+    "allonsY",
+    "wearsCoat",
+    "wearsSuit"
   ]
 }
