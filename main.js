@@ -77,17 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const traitBox = document.createElement("div");
     traitBox.className = "trait-details";
 
-    traitBox.innerHTML = `
-      <strong>Matching traits:</strong>
-      ${result.matchingTraits.length
-        ? result.matchingTraits.map(titleCase).join(", ")
-        : "None"}
-      <br>
-      <strong>Missing traits:</strong>
-      ${result.missingTraits.length
-        ? result.missingTraits.slice(0, 8).map(titleCase).join(", ")
-        : "None"}
-    `;
+   traitBox.innerHTML = `
+  <strong>Matching traits:</strong>
+  ${
+    result.matchingTraits.length
+      ? result.matchingTraits.map(titleCase).join(", ")
+      : "None"
+  }
+`;
 
     block.appendChild(row);
     block.appendChild(traitBox);
