@@ -1,146 +1,275 @@
 [
-  {
-    "name": "Dalek",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "none",
-    "mainAssociatedDoctor": "First Doctor",
-    "traits": ["villain", "alien", "robotic", "hiveMind", "classicWho", "newWho"]
-  },
-  {
-    "name": "Cyberman",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "none",
-    "mainAssociatedDoctor": "Second Doctor",
-    "traits": ["villain", "alien", "robotic", "cybernetic", "classicWho", "newWho"]
-  },
-  {
-    "name": "The Master",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "male",
-    "mainAssociatedDoctor": "Third Doctor",
-    "traits": ["villain", "timelord", "regenerates", "classicWho", "newWho", "timeTraveler"]
-  },
-  {
-    "name": "Davros",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "male",
-    "mainAssociatedDoctor": "Fourth Doctor",
-    "traits": ["villain", "cybernetic", "creatorOfDaleks", "disabled", "classicWho", "newWho"]
-  },
-  {
-    "name": "Weeping Angel",
-    "type": "villain",
-    "era": "new",
-    "gender": "none",
-    "mainAssociatedDoctor": "Tenth Doctor",
-    "traits": ["villain", "alien", "statueLike", "timeEater", "quantumLocked", "newWho"]
-  },
-  {
-    "name": "Sontaran",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "male",
-    "mainAssociatedDoctor": "Third Doctor",
-    "traits": ["villain", "alien", "clonedSpecies", "warrior", "classicWho", "newWho"]
-  },
-  {
-    "name": "Silence",
-    "type": "villain",
-    "era": "new",
-    "gender": "none",
-    "mainAssociatedDoctor": "Eleventh Doctor",
-    "traits": ["villain", "alien", "memoryWipe", "religiousOrder", "newWho"]
-  },
-  {
-    "name": "Silurian",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "varies",
-    "mainAssociatedDoctor": "Third Doctor",
-    "traits": ["villain", "alien", "prehistoricEarthSpecies", "classicWho", "newWho"]
-  },
-  {
-    "name": "Sea Devil",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "varies",
-    "mainAssociatedDoctor": "Third Doctor",
-    "traits": ["villain", "alien", "aquatic", "classicWho", "newWho"]
-  },
-  {
-    "name": "Zygon",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "varies",
-    "mainAssociatedDoctor": "Third Doctor",
-    "traits": ["villain", "alien", "shapeShifter", "infiltration", "classicWho", "newWho"]
-  },
-  {
-    "name": "Rassilon",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "male",
-    "mainAssociatedDoctor": "Tenth Doctor",
-    "traits": ["villain", "timelord", "leader", "gallifrey", "classicWho", "newWho"]
-  },
-  {
-    "name": "Omega",
-    "type": "villain",
-    "era": "classic",
-    "gender": "male",
-    "mainAssociatedDoctor": "Third Doctor",
-    "traits": ["villain", "timelord", "cosmicEntity", "trapped", "classicWho"]
-  },
-  {
-    "name": "The Great Intelligence",
-    "type": "villain",
-    "era": "classic+new",
-    "gender": "none",
-    "mainAssociatedDoctor": "Second Doctor",
-    "traits": ["villain", "alien", "intangible", "mindBased", "classicWho", "newWho"]
-  },
-  {
-    "name": "Black Guardian",
-    "type": "villain",
-    "era": "classic",
-    "gender": "male",
-    "mainAssociatedDoctor": "Fourth Doctor",
-    "traits": ["villain", "cosmicEntity", "godlike", "classicWho"]
-  },
-  {
-    "name": "Slitheen",
-    "type": "villain",
-    "era": "new",
-    "gender": "varies",
-    "mainAssociatedDoctor": "Ninth Doctor",
-    "traits": ["villain", "alien", "disguisedSpecies", "explosiveBody", "newWho"]
-  },
-  {
-    "name": "Ood",
-    "type": "villain",
-    "era": "new",
-    "gender": "none",
-    "mainAssociatedDoctor": "Tenth Doctor",
-    "traits": ["villain", "alien", "telepathic", "enslavedRace", "newWho"]
-  },
-  {
-    "name": "Judoon",
-    "type": "villain",
-    "era": "new",
-    "gender": "male",
-    "mainAssociatedDoctor": "Tenth Doctor",
-    "traits": ["villain", "alien", "policeForce", "rhinoLike", "newWho"]
-  },
-  {
-    "name": "Vashta Nerada",
-    "type": "villain",
-    "era": "new",
-    "gender": "none",
-    "mainAssociatedDoctor": "Tenth Doctor",
-    "traits": ["villain", "alien", "shadowBased", "invisibleThreat", "newWho"]
-  }
+  [
+{
+"name": "Dalek",
+"type": "villain",
+"era": "classic+new",
+"gender": "none",
+"mainAssociatedDoctor": "First Doctor",
+"traits": [
+"cyberneticWarMachine",
+"hiveMindSpecies",
+"exterminationDriven",
+"emotionlessLogic",
+"armoredMobileTank",
+"genocidalEmpire"
+]
+},
+{
+"name": "Cyberman",
+"type": "villain",
+"era": "classic+new",
+"gender": "none",
+"mainAssociatedDoctor": "Second Doctor",
+"traits": [
+"cyberneticConversionSpecies",
+"humanAssimilationBased",
+"emotionRemoval",
+"upgradeObsession",
+"armoredHumanoidRobots",
+"collectiveIdentity"
+]
+},
+{
+"name": "The Master",
+"type": "villain",
+"era": "classic+new",
+"gender": "male",
+"mainAssociatedDoctor": "Third Doctor",
+"traits": [
+"rogueTimeLord",
+"psychologicalManipulator",
+"regeneratingEnemy",
+"doctorRival",
+"chaoticIntelligence",
+"identityObsession"
+]
+},
+{
+"name": "Davros",
+"type": "villain",
+"era": "classic+new",
+"gender": "male",
+"mainAssociatedDoctor": "Fourth Doctor",
+"traits": [
+"madScientistArchetype",
+"cyberneticCreator",
+"dalekOriginEngineer",
+"geniusButDisabled",
+"obsessiveCreationDrive",
+"ethicallyCorruptInventor"
+]
+},
+{
+"name": "Weeping Angel",
+"type": "villain",
+"era": "new",
+"gender": "none",
+"mainAssociatedDoctor": "Tenth Doctor",
+"traits": [
+"quantumLockedPredator",
+"timeEnergyFeeder",
+"motionActivatedAttack",
+"statueDisguisedEntity",
+"nonContinuousExistence",
+"memoryTriggeredThreat"
+]
+},
+{
+"name": "Sontaran",
+"type": "villain",
+"era": "classic+new",
+"gender": "male",
+"mainAssociatedDoctor": "Third Doctor",
+"traits": [
+"clonedWarriorSpecies",
+"honorThroughCombatCulture",
+"militaryObsession",
+"breedingCloneRace",
+"frontLineSoldiers",
+"warriorEthos"
+]
+},
+{
+"name": "Silence",
+"type": "villain",
+"era": "new",
+"gender": "none",
+"mainAssociatedDoctor": "Eleventh Doctor",
+"traits": [
+"memoryEraseEffect",
+"unrememberedPresence",
+"religiousCultNetwork",
+"invisibleInfluenceGroup",
+"postHypnoticSuggestionTrigger",
+"hiddenControlSystem"
+]
+},
+{
+"name": "Silurian",
+"type": "villain",
+"era": "classic+new",
+"gender": "varies",
+"mainAssociatedDoctor": "Third Doctor",
+"traits": [
+"prehumanEarthSpecies",
+"ancientCivilizationReturn",
+"reptilianIntelligence",
+"surfaceWorldConflict",
+"scientificSociety",
+"nonHumanEarthOrigin"
+]
+},
+{
+"name": "Sea Devil",
+"type": "villain",
+"era": "classic+new",
+"gender": "varies",
+"mainAssociatedDoctor": "Third Doctor",
+"traits": [
+"aquaticSilurianVariant",
+"oceanDwellingSpecies",
+"ancientEarthRace",
+"environmentAdaptedSpecies",
+"surfaceConflictRace",
+"reptilianOffshoot"
+]
+},
+{
+"name": "Zygon",
+"type": "villain",
+"era": "classic+new",
+"gender": "varies",
+"mainAssociatedDoctor": "Third Doctor",
+"traits": [
+"biologicalShapeShifter",
+"infiltrationSpecialist",
+"identityImpersonation",
+"hostAssimilation",
+"terrorCellStructure",
+"mimicryBasedSpecies"
+]
+},
+{
+"name": "Rassilon",
+"type": "villain",
+"era": "classic+new",
+"gender": "male",
+"mainAssociatedDoctor": "Tenth Doctor",
+"traits": [
+"founderOfGallifrey",
+"timeLordFounderFigure",
+"ascendedPoliticalEntity",
+"authoritarianLeader",
+"timeManipulationAuthority",
+"gallifreyEliteRuler"
+]
+},
+{
+"name": "Omega",
+"type": "villain",
+"era": "classic",
+"gender": "male",
+"mainAssociatedDoctor": "Third Doctor",
+"traits": [
+"antimatterEntity",
+"trappedInAntimatterUniverse",
+"stellarEngineeringOrigin",
+"cosmicLevelBeing",
+"timeLordLegendFigure",
+"existentiallyIsolatedEntity"
+]
+},
+{
+"name": "The Great Intelligence",
+"type": "villain",
+"era": "classic+new",
+"gender": "none",
+"mainAssociatedDoctor": "Second Doctor",
+"traits": [
+"disembodiedIntelligence",
+"mindPossessionEntity",
+"telepathicControlNetwork",
+"bodyHijackingEntity",
+"existenceWithoutForm",
+"amorphousConsciousness"
+]
+},
+{
+"name": "Black Guardian",
+"type": "villain",
+"era": "classic",
+"gender": "male",
+"mainAssociatedDoctor": "Fourth Doctor",
+"traits": [
+"cosmicEmbodimentOfEvil",
+"abstractEntity",
+"manipulativeDeity",
+"destinyManipulator",
+"chaosForceEntity",
+"nonPhysicalBeing"
+]
+},
+{
+"name": "Slitheen",
+"type": "villain",
+"era": "new",
+"gender": "varies",
+"mainAssociatedDoctor": "Ninth Doctor",
+"traits": [
+"organicDisguiseSuitSpecies",
+"explosiveBiologicalBody",
+"criminalFamilyUnit",
+"resourceExploitationDriven",
+"infiltrationThroughDisguise",
+"ruthlessCapitalistMotivation"
+]
+},
+{
+"name": "Ood",
+"type": "villain",
+"era": "new",
+"gender": "none",
+"mainAssociatedDoctor": "Tenth Doctor",
+"traits": [
+"telepathicServantSpecies",
+"hiveMindTelepathy",
+"enslavedAlienRace",
+"externalBrainOrganEntity",
+"psychicCommunicationSpecies",
+"subjugatedCivilization"
+]
+},
+{
+"name": "Judoon",
+"type": "villain",
+"era": "new",
+"gender": "male",
+"mainAssociatedDoctor": "Tenth Doctor",
+"traits": [
+"alienPoliceForce",
+"mercenaryLawEnforcement",
+"literalLawEnforcers",
+"rhinoLikeArmorSpecies",
+"contractBasedAuthority",
+"militarizedJurisdictionAgents"
+]
+},
+{
+"name": "Vashta Nerada",
+"type": "villain",
+"era": "new",
+"gender": "none",
+"mainAssociatedDoctor": "Tenth Doctor",
+"traits": [
+"microscopicShadowPredators",
+"lightAvoidingSwarmEntity",
+"invisibleUntilAttack",
+"fleshConsumingShadows",
+"everywhereEnvironmentHazard",
+"massDistributedLifeform"
+]
+}
+]
+
 ]
