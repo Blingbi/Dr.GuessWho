@@ -328,19 +328,26 @@ export class AkinatorEngine {
     return score;
   }
 
-  getProbabilities() {
-    const scores = this.candidates.map(c => ({
+ getProbabilities() {
+  const scores = this.candidates.map(c => ({
+    character: c,
+    score: this.calculateCandidateScore(c)
+  }));
+
+  const total = scores.reduce((sum, s) => sum + s.score, 0);
+
+  if (total <= 0) {
+    return this.candidates.map(c => ({
       character: c,
-      score: this.calculateCandidateScore(c)
-    }));
-
-    const total = scores.reduce((sum, s) => sum + s.score, 0);
-
-    return scores.map(s => ({
-      character: s.character,
-      probability: total === 0 ? 0 : s.score / total
+      probability: 1 / this.candidates.length
     }));
   }
+
+  return scores.map(s => ({
+    character: s.character,
+    probability: s.score / total
+  }));
+}
 
   // ----------------------------
   // GUESS LOGIC
