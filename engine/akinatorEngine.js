@@ -14,7 +14,13 @@ export class AkinatorEngine {
         this.traitFrequency.set(t, (this.traitFrequency.get(t) || 0) + 1);
       }
     }
-
+    getPhase() {
+      const remaining = this.candidates.length;
+    
+      if (remaining > 25) return "early";
+      if (remaining > 6) return "mid";
+      return "end";
+    }
     // ----------------------------
     // TRAIT INDEX (FAST LOOKUP)
     // ----------------------------
@@ -155,25 +161,68 @@ informationGain(trait) {
 
     const depth = this.getDepth();
 
-   for (const trait of traits) {
-      if (this.isBadTraitSplit(trait)) continue;
-      const ig = this.informationGain(trait);
-      const weight = this.traitWeight(trait);
+  const phase = this.getPhase();
 
-      const depthPenalty = 1 - depth * 0.5;
+for (const trait of traits) {
+  if (this.isBadTraitSplit(trait)) continue;
 
-      // softened weighting (IMPORTANT FIX)
-      const score = ig * (1 + Math.log(weight)) * depthPenalty;
+  const ig = this.informationGain(trait);
+  const weight = this.traitWeight(trait);
 
-      if (score > bestScore) {
-        bestScore = score;
-        bestTrait = trait;
-      }
-    }
+  let phaseBoost = 1;
 
-    return bestTrait;
+  if (phase === "early") {
+    // prefer broad splits
+    phaseBoost = 1.2;
   }
 
+  if (phase === "mid") {
+    // balanced selection
+    phaseBoost = 1.0;
+  }
+
+  if (phase === "end") {
+    // favor rare / precise traits
+    phaseBoost = 1.4;
+  }
+
+  const depthPenalty = 1 - this.getDepth() * 0.5;
+
+  const score =
+    ig *
+    (1 + Math.log(weight)) *
+    phaseBoost *
+    depthPenalty;
+
+  if (score > bestScore) {
+    bestScore = score;
+    bestTrait = trait;
+  }
+}
+if (!bestTrait) {
+  return this.getFallbackTrait();
+}
+    return bestTrait;
+  }
+getFallbackTrait() {
+  const traits = this.getAllTraits();
+
+  let bestTrait = null;
+  let bestSplitScore = -Infinity;
+
+  for (const trait of traits) {
+    const { yes, no } = this.splitByTrait(trait);
+
+    const split = Math.min(yes.length, no.length);
+
+    if (split > bestSplitScore) {
+      bestSplitScore = split;
+      bestTrait = trait;
+    }
+  }
+
+  return bestTrait;
+}
   // ----------------------------
   // FILTER BY ANSWER
   // ----------------------------
@@ -221,21 +270,26 @@ informationGain(trait) {
   // ----------------------------
   // GUESS LOGIC
   // ----------------------------
-  shouldGuess() {
-    const probs = this.getProbabilities();
+shouldGuess() {
+  const probs = this.getProbabilities();
 
-    if (probs.length === 0) return false;
+  if (probs.length === 0) return false;
 
-    const best = probs.reduce((a, b) =>
-      a.probability > b.probability ? a : b
-    );
+  const best = probs.reduce((a, b) =>
+    a.probability > b.probability ? a : b
+  );
 
-    return (
-      best.probability > 0.92 ||
-      this.candidates.length <= 3
-    );
+  const phase = this.getPhase();
+
+  if (phase === "early") return false;
+
+  if (phase === "mid") {
+    return best.probability > 0.95 || this.candidates.length <= 2;
   }
 
+  // end game
+  return best.probability > 0.85 || this.candidates.length <= 2;
+}
   guess() {
     const probs = this.getProbabilities();
 
