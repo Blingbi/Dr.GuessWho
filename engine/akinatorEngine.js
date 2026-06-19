@@ -264,6 +264,14 @@ export class AkinatorEngine {
     }
 
     const nextTrait = this.getBestTrait();
+
+    if (!nextTrait) {
+      return {
+        type: "guess",
+        guess: this.guess(),
+        remaining: this.canidates
+      };
+    }
     this.lastTraitAsked = nextTrait;
 
     return {
