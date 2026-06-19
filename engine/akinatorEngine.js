@@ -376,10 +376,12 @@ export class AkinatorEngine {
   // ----------------------------
   // QUESTION FORMAT
   // ----------------------------
-  formatQuestion(trait) {
+formatQuestion(trait) {
   if (!trait) return null;
 
-  // Optional override map for best quality questions
+  // ----------------------------
+  // CLEAN OVERRIDES (BEST QUALITY QUESTIONS)
+  // ----------------------------
   const overrides = {
     companion: "Is this character a companion?",
     human: "Is this character human?",
@@ -400,59 +402,63 @@ export class AkinatorEngine {
   if (overrides[trait]) return overrides[trait];
 
   // ----------------------------
-  // AUTO-GENERATION LOGIC
+  // NORMALIZE TRAIT TEXT
   // ----------------------------
-
-  let text = trait;
-
-  // split camelCase / PascalCase
-  text = text
+  let text = trait
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
     .toLowerCase();
 
-  // cleanup prefixes
+  // remove junk prefixes
   text = text
     .replace(/^is /, "")
     .replace(/^has /, "")
     .replace(/^can /, "");
 
-  // convert common patterns
-  const negative = [
-    "not",
-    "no",
-    "never"
-  ];
+  const lowerTrait = trait.toLowerCase();
 
-  const isNegative = negative.some(n => trait.toLowerCase().includes(n));
-
-  // basic grammar shaping
+  // ----------------------------
+  // ROLE-BASED QUESTIONS
+  // ----------------------------
   if (
-    trait.toLowerCase().includes("teacher") ||
-    trait.toLowerCase().includes("doctor") ||
-    trait.toLowerCase().includes("scientist") ||
-    trait.toLowerCase().includes("soldier") ||
-    trait.toLowerCase().includes("officer")
+    lowerTrait.includes("teacher") ||
+    lowerTrait.includes("doctor") ||
+    lowerTrait.includes("scientist") ||
+    lowerTrait.includes("soldier") ||
+    lowerTrait.includes("officer") ||
+    lowerTrait.includes("nurse") ||
+    lowerTrait.includes("student") ||
+    lowerTrait.includes("journalist")
   ) {
     return `Is this character a ${text}?`;
   }
 
+  // ----------------------------
+  // AFFILIATION QUESTIONS
+  // ----------------------------
   if (
-    trait.toLowerCase().includes("associatedwith") ||
-    trait.toLowerCase().includes("partof")
+    lowerTrait.includes("associatedwith") ||
+    lowerTrait.includes("partof") ||
+    lowerTrait.includes("unit") ||
+    lowerTrait.includes("torchwood")
   ) {
-    return `Is this character associated with ${text.replace("associated with", "")}?`;
+    return `Is this character associated with ${text}?`;
   }
 
+  // ----------------------------
+  // ACTION / EXPERIENCE TRAITS
+  // ----------------------------
   if (
-    trait.toLowerCase().includes("travels") ||
-    trait.toLowerCase().includes("uses") ||
-    trait.toLowerCase().includes("has")
+    lowerTrait.includes("travels") ||
+    lowerTrait.includes("uses") ||
+    lowerTrait.includes("has")
   ) {
     return `Has this character ${text}?`;
   }
 
-  // default fallback
+  // ----------------------------
+  // DEFAULT (SAFE FALLBACK)
+  // ----------------------------
   return `Does this character have the trait: ${text}?`;
 }
 
