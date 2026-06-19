@@ -1,3 +1,5 @@
+console.log("MAIN JS STARTED");
+alert("MAIN JS STARTED");
 import { AkinatorEngine } from "./engine/akinatorEngine.js";
 import data from "./data/allCharacters.json" assert { type: "json" };
 
