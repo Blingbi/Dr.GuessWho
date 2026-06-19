@@ -1,7 +1,7 @@
-import doctors from "./doctors.json" assert { type: "json" };
-import companions from "./companions.json" assert { type: "json" };
-import villains from "./villains.json" assert { type: "json" };
-import recurring from "./recurring.json" assert { type: "json" };
+import doctors from "./doctors.json" with { type: "json" };
+import companions from "./companions.json" with { type: "json" };
+import villains from "./villains.json" with { type: "json" };
+import recurring from "./recurring.json" with { type: "json" };
 
 const allCharacters = [
   ...doctors,
