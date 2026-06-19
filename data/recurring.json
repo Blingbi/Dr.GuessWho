@@ -1,122 +1,231 @@
 [
-  {
-    "name": "Kate Stewart",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "UNIT",
-    "traits": ["recurring", "human", "leader", "associatedWithUNIT", "newWho"]
-  },
-  {
-    "name": "Brigadier Lethbridge-Stewart",
-    "type": "recurring",
-    "era": "classic+new",
-    "gender": "male",
-    "mainGroup": "UNIT",
-    "traits": ["recurring", "human", "military", "leader", "associatedWithUNIT", "classicWho", "newWho"]
-  },
-  {
-    "name": "Wilfred Mott",
-    "type": "recurring",
-    "era": "new",
-    "gender": "male",
-    "mainGroup": "civilianFamily",
-    "traits": ["recurring", "human", "earthBased", "civilian", "grandfather", "newWho"]
-  },
-  {
-    "name": "Jackie Tyler",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "TylerFamily",
-    "traits": ["recurring", "human", "earthBased", "mother", "newWho"]
-  },
-  {
-    "name": "Mickey Smith",
-    "type": "recurring",
-    "era": "new",
-    "gender": "male",
-    "mainGroup": "TylerFamily",
-    "traits": ["recurring", "human", "earthBased", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Harriet Jones",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "politics",
-    "traits": ["recurring", "human", "leader", "politician", "earthBased", "newWho"]
-  },
-  {
-    "name": "Madame Vastra",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "PaternosterGang",
-    "traits": ["recurring", "alien", "silurian", "detective", "leader", "newWho"]
-  },
-  {
-    "name": "Jenny Flint",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "PaternosterGang",
-    "traits": ["recurring", "human", "warrior", "newWho"]
-  },
-  {
-    "name": "Strax",
-    "type": "recurring",
-    "era": "new",
-    "gender": "male",
-    "mainGroup": "PaternosterGang",
-    "traits": ["recurring", "alien", "sontaran", "warrior", "comicRelief", "newWho"]
-  },
-  {
-    "name": "Gwen Cooper",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "Torchwood",
-    "traits": ["recurring", "human", "associatedWithTorchwood", "leader", "newWho"]
-  },
-  {
-    "name": "Ianto Jones",
-    "type": "recurring",
-    "era": "new",
-    "gender": "male",
-    "mainGroup": "Torchwood",
-    "traits": ["recurring", "human", "associatedWithTorchwood", "newWho"]
-  },
-  {
-    "name": "Osgood",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "UNIT",
-    "traits": ["recurring", "human", "associatedWithUNIT", "scientist", "newWho"]
-  },
-  {
-    "name": "Captain John Hart",
-    "type": "recurring",
-    "era": "new",
-    "gender": "male",
-    "mainGroup": "Torchwood",
-    "traits": ["recurring", "immortal", "chaotic", "timeTraveler", "associatedWithTorchwood", "newWho"]
-  },
-  {
-    "name": "Ashildr (Me)",
-    "type": "recurring",
-    "era": "new",
-    "gender": "female",
-    "mainGroup": "immortalHumans",
-    "traits": ["recurring", "human", "immortal", "timeTraveler", "loner", "newWho"]
-  },
-  {
-    "name": "Brian Williams",
-    "type": "recurring",
-    "era": "new",
-    "gender": "male",
-    "mainGroup": "PondFamily",
-    "traits": ["recurring", "human", "earthBased", "father", "civilian", "newWho"]
-  }
+ [
+{
+"name": "Kate Stewart",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "UNIT",
+"traits": [
+"human",
+"scientistLeader",
+"unitCommander",
+"scientificDefenseOrganization",
+"strategicThinker",
+"daughterOfBrigadier"
+]
+},
+{
+"name": "Brigadier Lethbridge-Stewart",
+"type": "recurring",
+"era": "classic+new",
+"gender": "male",
+"mainGroup": "UNIT",
+"traits": [
+"human",
+"militaryOfficer",
+"unitFounderFigure",
+"earthDefenseLeader",
+"classicMilitaryPersona",
+"doctorAllyRecurring",
+"fatherOfKateStewart"
+]
+},
+{
+"name": "Wilfred Mott",
+"type": "recurring",
+"era": "new",
+"gender": "male",
+"mainGroup": "civilianFamily",
+"traits": [
+"human",
+"grandfatherFigure",
+"civilian",
+"workingClassEarth",
+"emotionalSupportCharacter",
+"propheticAwareness"
+]
+},
+{
+"name": "Jackie Tyler",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "TylerFamily",
+"traits": [
+"human",
+"motherFigure",
+"protectiveParent",
+"workingClassEarth",
+"roseTylerFamily",
+"londonResident"
+]
+},
+{
+"name": "Mickey Smith",
+"type": "recurring",
+"era": "new",
+"gender": "male",
+"mainGroup": "TylerFamily",
+"traits": [
+"human",
+"mechanic",
+"cybermenResistanceMember",
+"parallelEarthSurvivor",
+"growthFromCowardToHero",
+"roseTylerExPartner"
+]
+},
+{
+"name": "Harriet Jones",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "politics",
+"traits": [
+"human",
+"primeMinister",
+"politicalLeader",
+"earthGovernment",
+"controversialLeader",
+"defenderOfEarth"
+]
+},
+{
+"name": "Madame Vastra",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "PaternosterGang",
+"traits": [
+"silurian",
+"alien",
+"detective",
+"victorianEraSurvivor",
+"leaderFigure",
+"paternosterGangHead"
+]
+},
+{
+"name": "Jenny Flint",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "PaternosterGang",
+"traits": [
+"human",
+"martialArtist",
+"detectiveAssistant",
+"victorianEraAgent",
+"loyalPartner"
+]
+},
+{
+"name": "Strax",
+"type": "recurring",
+"era": "new",
+"gender": "male",
+"mainGroup": "PaternosterGang",
+"traits": [
+"sontaran",
+"alien",
+"soldierClone",
+"comicRelief",
+"battleObsessed",
+"paternosterGangMember"
+]
+},
+{
+"name": "Gwen Cooper",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "Torchwood",
+"traits": [
+"human",
+"torchwoodAgent",
+"fieldOperative",
+"teamLeader",
+"investigator",
+"welshOrigin"
+]
+},
+{
+"name": "Ianto Jones",
+"type": "recurring",
+"era": "new",
+"gender": "male",
+"mainGroup": "Torchwood",
+"traits": [
+"human",
+"torchwoodAgent",
+"supportStaffSpecialist",
+"organizationalRole",
+"tragicStoryArc",
+"welshOrigin"
+]
+},
+{
+"name": "Osgood",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "UNIT",
+"traits": [
+"human",
+"scientist",
+"unitResearcher",
+"doctorFan",
+"scientificAnalyst",
+"duplicateIdentityMystery"
+]
+},
+{
+"name": "Captain John Hart",
+"type": "recurring",
+"era": "new",
+"gender": "male",
+"mainGroup": "Torchwood",
+"traits": [
+"immortal",
+"timeTraveler",
+"chaoticAlignment",
+"formerTorchwoodAgent",
+"violentTendencies",
+"jackHarknessRival"
+]
+},
+{
+"name": "Ashildr (Me)",
+"type": "recurring",
+"era": "new",
+"gender": "female",
+"mainGroup": "immortalHumans",
+"traits": [
+"human",
+"immortal",
+"timeTraveler",
+"loner",
+"memoryBurden",
+"healerTurnedObserver",
+"postHumanEvolution"
+]
+},
+{
+"name": "Brian Williams",
+"type": "recurring",
+"era": "new",
+"gender": "male",
+"mainGroup": "PondFamily",
+"traits": [
+"human",
+"retiredWorker",
+"grandfatherFigure",
+"earthCivilian",
+"emotionalSupportCharacter",
+"spaceAdventureWitness"
+]
+}
+]
+
 ]
