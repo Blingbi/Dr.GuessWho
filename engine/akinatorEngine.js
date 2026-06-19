@@ -6,6 +6,20 @@ export class AkinatorEngine {
     this.lastTraitAsked = null;
 
     this.startCount = data.length;
+
+    // ----------------------------
+    // TRAIT INDEX (FAST LOOKUP)
+    // ----------------------------
+    this.traitIndex = new Map();
+
+    for (const c of data) {
+      for (const t of c.traits) {
+        if (!this.traitIndex.has(t)) {
+          this.traitIndex.set(t, new Set());
+        }
+        this.traitIndex.get(t).add(c);
+      }
+    }
   }
 
   // ----------------------------
@@ -23,17 +37,15 @@ export class AkinatorEngine {
   getDepth() {
     const remaining = this.candidates.length;
     const total = this.startCount;
-
     return 1 - (remaining / total);
   }
 
   // ----------------------------
-  // TRAIT WEIGHTS (importance tuning)
+  // TRAIT WEIGHTS
   // ----------------------------
   traitWeight(trait) {
     const weights = {
       human: 4,
-      recurring: 5,
       alien: 4,
       timelord: 4,
       villain: 5,
@@ -42,7 +54,7 @@ export class AkinatorEngine {
       male: 3,
       female: 3,
 
-      robotic: 1.1,
+      robotic: 1.2,
       immortal: 1.8,
       timeTraveler: 1.3,
 
@@ -61,34 +73,39 @@ export class AkinatorEngine {
   }
 
   // ----------------------------
-  // ENTROPY (true information gain)
+  // SPLIT BY TRAIT (FAST VERSION)
   // ----------------------------
   splitByTrait(trait) {
+    const yesSet = this.traitIndex.get(trait) || new Set();
+
     const yes = [];
     const no = [];
 
     for (const c of this.candidates) {
-      if (c.traits.includes(trait)) yes.push(c);
+      if (yesSet.has(c)) yes.push(c);
       else no.push(c);
     }
 
     return { yes, no };
   }
 
+  // ----------------------------
+  // ENTROPY (FIXED)
+  // ----------------------------
   informationGain(trait) {
     const total = this.candidates.length;
     if (total <= 1) return 0;
 
     const { yes, no } = this.splitByTrait(trait);
 
-    const pYes = yes.length / total;
-    const pNo = no.length / total;
+    const entropy = (arr) => {
+      const p = arr.length / total;
+      if (p === 0) return 0;
+      return -p * Math.log2(p);
+    };
 
     const before = Math.log2(total);
-
-    const after =
-      pYes * Math.log2(yes.length || 1) +
-      pNo * Math.log2(no.length || 1);
+    const after = entropy(yes) + entropy(no);
 
     return before - after;
   }
@@ -125,10 +142,10 @@ export class AkinatorEngine {
       const ig = this.informationGain(trait);
       const weight = this.traitWeight(trait);
 
-      // depth penalty: early game avoids deep traits
       const depthPenalty = 1 - depth * 0.5;
 
-      const score = ig * weight * depthPenalty;
+      // softened weighting (IMPORTANT FIX)
+      const score = ig * (1 + Math.log(weight)) * depthPenalty;
 
       if (score > bestScore) {
         bestScore = score;
@@ -157,17 +174,13 @@ export class AkinatorEngine {
   }
 
   // ----------------------------
-  // CONFIDENCE SYSTEM
+  // CONFIDENCE MODEL (IMPROVED)
   // ----------------------------
   calculateCandidateScore(candidate) {
     let score = 1;
 
     for (const trait of this.askedTraits) {
-      if (candidate.traits.includes(trait)) {
-        score *= 1.2;
-      } else {
-        score *= 0.8;
-      }
+      score *= candidate.traits.includes(trait) ? 0.75 : 0.25;
     }
 
     return score;
@@ -183,7 +196,7 @@ export class AkinatorEngine {
 
     return scores.map(s => ({
       character: s.character,
-      probability: s.score / total
+      probability: total === 0 ? 0 : s.score / total
     }));
   }
 
@@ -200,9 +213,9 @@ export class AkinatorEngine {
     );
 
     return (
-      best.probability > .92 ||
+      best.probability > 0.92 ||
       this.candidates.length <= 3
-      );
+    );
   }
 
   guess() {
@@ -219,36 +232,26 @@ export class AkinatorEngine {
   // QUESTION FORMATTER
   // ----------------------------
   formatQuestion(trait) {
-    
-  const map = {
-  human: "Is this character human?",
-  alien: "Is this character an alien?",
-  timelord: "Is this a Time Lord?",
-  doctor: "Is this character one of the Doctors?",
-  companion: "Is this character a companion?",
-  villain: "Is this character a villain?",
+    const map = {
+      human: "Is this character human?",
+      alien: "Is this character an alien?",
+      timelord: "Is this a Time Lord?",
+      doctor: "Is this character one of the Doctors?",
+      companion: "Is this character a companion?",
+      villain: "Is this character a villain?",
 
-  male: "Is the character male?",
-  female: "Is the character female?",
+      male: "Is the character male?",
+      female: "Is the character female?",
 
-  classicWho: "Did this character first appear in Classic Doctor Who?",
-  newWho: "Did this character first appear in Modern Doctor Who?",
+      robotic: "Is this character robotic?",
+      immortal: "Is this character immortal?",
+      shapeShifter: "Can this character change appearance?",
+      hiveMind: "Is this character part of a hive mind?",
+      quantumLocked: "Is this character quantum locked?",
 
-  travelsInTardis: "Did this character travel in the TARDIS?",
-  teacher: "Is this character a teacher?",
-  genius: "Is this character considered a genius?",
-  military: "Does this character have a military background?",
-  scientist: "Is this character a scientist?",
-
-  robotic: "Is this character robotic?",
-  immortal: "Is this character immortal?",
-  shapeShifter: "Can this character change appearance?",
-  hiveMind: "Is this character part of a hive mind?",
-  quantumLocked: "Is this character quantum locked?",
-
-  associatedWithUNIT: "Is this character associated with UNIT?",
-  associatedWithTorchwood: "Is this character associated with Torchwood?"
-};
+      associatedWithUNIT: "Is this character associated with UNIT?",
+      associatedWithTorchwood: "Is this character associated with Torchwood?"
+    };
 
     return map[trait] || `Does this character have trait: ${trait}?`;
   }
@@ -271,13 +274,14 @@ export class AkinatorEngine {
 
     const nextTrait = this.getBestTrait();
 
-    if (!nextTrait) {
+    if (!nextTrait || this.candidates.length === 0) {
       return {
         type: "guess",
         guess: this.guess(),
-        remaining: this.canidates
+        remaining: this.candidates
       };
     }
+
     this.lastTraitAsked = nextTrait;
 
     return {
