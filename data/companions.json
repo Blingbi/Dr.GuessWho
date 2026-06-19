@@ -1,306 +1,628 @@
 [
   {
-    "name": "Susan Foreman",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "First Doctor",
-    "traits": ["companion", "timelord", "classicWho", "travelsInTardis"]
-  },
+"name": "Susan Foreman",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "First Doctor",
+"traits": [
+"companion",
+"timeLord",
+"travelsInTardis",
+"doctorsGranddaughter",
+"fromGallifrey",
+"firstCompanion",
+"teenager"
+]
+},
+{
+"name": "Ian Chesterton",
+"type": "companion",
+"era": "classic",
+"gender": "male",
+"mainCompanionOf": "First Doctor",
+"traits": [
+"companion",
+"human",
+"travelsInTardis",
+"teacher",
+"historyTeacher",
+"schoolTeacher",
+"1960sEarth",
+"marriedToBarbaraWright"
+]
+},
+{
+"name": "Barbara Wright",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "First Doctor",
+"traits": [
+"companion",
+"human",
+"travelsInTardis",
+"teacher",
+"historyTeacher",
+"schoolTeacher",
+"1960sEarth",
+"marriedToIanChesterton"
+]
+},
   {
-    "name": "Ian Chesterton",
-    "type": "companion",
-    "era": "classic",
-    "gender": "male",
-    "mainCompanionOf": "First Doctor",
-    "traits": ["companion", "human", "classicWho", "travelsInTardis", "teacher"]
-  },
+"name": "Jamie McCrimmon",
+"type": "companion",
+"era": "classic",
+"gender": "male",
+"mainCompanionOf": "Second Doctor",
+"traits": [
+"companion",
+"human",
+"travelsInTardis",
+"highlander",
+"scottish",
+"historicalCompanion",
+"18thCentury",
+"warrior"
+]
+},
+{
+"name": "Zoe Heriot",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Second Doctor",
+"traits": [
+"companion",
+"human",
+"travelsInTardis",
+"genius",
+"mathematician",
+"futureHuman",
+"spaceStationResident",
+"highIntelligence"
+]
+},
+{
+"name": "Victoria Waterfield",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Second Doctor",
+"traits": [
+"companion",
+"human",
+"travelsInTardis",
+"victorianEra",
+"historicalCompanion",
+"orphan",
+"19thCentury"
+]
+},
+{
+"name": "Liz Shaw",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Third Doctor",
+"traits": [
+"companion",
+"human",
+"associatedWithUNIT",
+"scientist",
+"doctorate",
+"intellectual",
+"earthboundDoctorEra"
+]
+},
+
   {
-    "name": "Barbara Wright",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "First Doctor",
-    "traits": ["companion", "human", "classicWho", "travelsInTardis", "teacher"]
-  },
-  {
-    "name": "Jamie McCrimmon",
-    "type": "companion",
-    "era": "classic",
-    "gender": "male",
-    "mainCompanionOf": "Second Doctor",
-    "traits": ["companion", "human", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Zoe Heriot",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Second Doctor",
-    "traits": ["companion", "human", "classicWho", "travelsInTardis", "genius"]
-  },
-  {
-    "name": "Victoria Waterfield",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Second Doctor",
-    "traits": ["companion", "human", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Liz Shaw",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Third Doctor",
-    "traits": ["companion", "human", "classicWho", "associatedWithUNIT", "scientist"]
-  },
-  {
-    "name": "Jo Grant",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Third Doctor",
-    "traits": ["companion", "human", "classicWho", "associatedWithUNIT"]
-  },
-  {
-    "name": "Sarah Jane Smith",
-    "type": "companion",
-    "era": "both",
-    "gender": "female",
-    "mainCompanionOf": "Fourth Doctor",
-    "traits": ["companion", "human", "classicWho", "newWho", "journalist"]
-  },
-  {
-    "name": "Harry Sullivan",
-    "type": "companion",
-    "era": "classic",
-    "gender": "male",
-    "mainCompanionOf": "Fourth Doctor",
-    "traits": ["companion", "human", "classicWho", "military"]
-  },
-  {
-    "name": "Leela",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Fourth Doctor",
-    "traits": ["companion", "humanLike", "classicWho", "warrior"]
-  },
-  {
-    "name": "Romana I",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Fourth Doctor",
-    "traits": ["companion", "timelord", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Romana II",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Fourth Doctor",
-    "traits": ["companion", "timelord", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Adric",
-    "type": "companion",
-    "era": "classic",
-    "gender": "male",
-    "mainCompanionOf": "Fifth Doctor",
-    "traits": ["companion", "alien", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Nyssa",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Fifth Doctor",
-    "traits": ["companion", "alien", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Tegan Jovanka",
-    "type": "companion",
-    "era": "both",
-    "gender": "female",
-    "mainCompanionOf": "Fifth Doctor",
-    "traits": ["companion", "human", "classicWho", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Peri Brown",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Sixth Doctor",
-    "traits": ["companion", "human", "classicWho", "travelsInTardis"]
-  },
-  {
-    "name": "Mel Bush",
-    "type": "companion",
-    "era": "both",
-    "gender": "female",
-    "mainCompanionOf": "Sixth Doctor",
-    "traits": ["companion", "human", "classicWho", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Ace",
-    "type": "companion",
-    "era": "classic",
-    "gender": "female",
-    "mainCompanionOf": "Seventh Doctor",
-    "traits": ["companion", "human", "classicWho", "explosivesExpert", "travelsInTardis"]
-  },
-  {
-    "name": "Grace Holloway",
-    "type": "companion",
-    "era": "movie",
-    "gender": "female",
-    "mainCompanionOf": "Eighth Doctor",
-    "traits": ["companion", "human", "movieWho"]
-  },
-  {
-    "name": "Charley Pollard",
-    "type": "companion",
-    "era": "audio",
-    "gender": "female",
-    "mainCompanionOf": "Eighth Doctor",
-    "traits": ["companion", "human"]
-  },
-  {
-    "name": "Rose Tyler",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Ninth Doctor",
-    "traits": ["companion", "human", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Mickey Smith",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Ninth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  },
-  {
-    "name": "Captain Jack Harkness",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Ninth Doctor",
-    "traits": ["companion", "immortal", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Martha Jones",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Tenth Doctor",
-    "traits": ["companion", "human", "newWho", "doctorProfession"]
-  },
-  {
-    "name": "Donna Noble",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Tenth Doctor",
-    "traits": ["companion", "human", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Amy Pond",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Eleventh Doctor",
-    "traits": ["companion", "human", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Rory Williams",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Eleventh Doctor",
-    "traits": ["companion", "human", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "River Song",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Eleventh Doctor",
-    "traits": ["companion", "timeTraveler", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Clara Oswald",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Twelfth Doctor",
-    "traits": ["companion", "human", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Bill Potts",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Twelfth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  },
-  {
-    "name": "Nardole",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Twelfth Doctor",
-    "traits": ["companion", "alien", "newWho"]
-  },
-  {
-    "name": "Yaz Khan",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Thirteenth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  },
-  {
-    "name": "Ryan Sinclair",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Thirteenth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  },
-  {
-    "name": "Graham O'Brien",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Thirteenth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  },
-  {
-    "name": "Dan Lewis",
-    "type": "companion",
-    "era": "new",
-    "gender": "male",
-    "mainCompanionOf": "Thirteenth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  },
-  {
-    "name": "Ruby Sunday",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Fifteenth Doctor",
-    "traits": ["companion", "human", "newWho", "travelsInTardis"]
-  },
-  {
-    "name": "Belinda Chandra",
-    "type": "companion",
-    "era": "new",
-    "gender": "female",
-    "mainCompanionOf": "Fifteenth Doctor",
-    "traits": ["companion", "human", "newWho"]
-  }
+"name": "Jo Grant",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Third Doctor",
+"traits": [
+"companion",
+"human",
+"associatedWithUNIT",
+"earthboundEra",
+"assistant",
+"enthusiastic",
+"improvisational"
+]
+},
+{
+"name": "Sarah Jane Smith",
+"type": "companion",
+"era": "both",
+"gender": "female",
+"mainCompanionOf": "Fourth Doctor",
+"traits": [
+"companion",
+"human",
+"journalist",
+"investigator",
+"spinOffLead",
+"alienEncountersExpert",
+"travelsInTardis",
+"multipleDoctors"
+]
+},
+{
+"name": "Harry Sullivan",
+"type": "companion",
+"era": "classic",
+"gender": "male",
+"mainCompanionOf": "Fourth Doctor",
+"traits": [
+"companion",
+"human",
+"navalDoctor",
+"military",
+"medicalOfficer",
+"earthMilitary",
+"clumsyPhysicallyStrong"
+]
+},
+{
+"name": "Leela",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Fourth Doctor",
+"traits": [
+"companion",
+"humanoid",
+"tribalWarrior",
+"primitiveSociety",
+"knifeUser",
+"instinctDriven",
+"nonEarthOrigin"
+]
+},
+{
+"name": "Romana I",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Fourth Doctor",
+"traits": [
+"companion",
+"timeLord",
+"gallifreyan",
+"academic",
+"regenerationCapable",
+"travelsInTardis",
+"formalPersonality"
+]
+},
+{
+"name": "Romana II",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Fourth Doctor",
+"traits": [
+"companion",
+"timeLord",
+"gallifreyan",
+"regeneratedRomana",
+"academic",
+"travelsInTardis",
+"confidentPersonality",
+"stylishPersona"
+]
+},
+{
+"name": "Adric",
+"type": "companion",
+"era": "classic",
+"gender": "male",
+"mainCompanionOf": "Fifth Doctor",
+"traits": [
+"companion",
+"alien",
+"mathematician",
+"genius",
+"teenager",
+"tragicDeath",
+"crashingSpaceshipOrigin",
+"e-spaceNative"
+]
+},
+{
+"name": "Nyssa",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Fifth Doctor",
+"traits": [
+"companion",
+"alien",
+"scientist",
+"medicalKnowledge",
+"tragicBackstory",
+"turanian",
+"peacefulPersonality",
+"e-spaceNative"
+]
+},
+{
+"name": "Tegan Jovanka",
+"type": "companion",
+"era": "both",
+"gender": "female",
+"mainCompanionOf": "Fifth Doctor",
+"traits": [
+"companion",
+"human",
+"airlineCrew",
+"strongWilled",
+"sarcastic",
+"travelsInTardis",
+"modernEarthOrigin",
+"multipleDoctors"
+]
+},
+{
+"name": "Peri Brown",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Sixth Doctor",
+"traits": [
+"companion",
+"human",
+"botanyStudent",
+"americanConnection",
+"earthStudent",
+"travelsInTardis",
+"vulnerableCharacter"
+]
+},
+{
+"name": "Mel Bush",
+"type": "companion",
+"era": "both",
+"gender": "female",
+"mainCompanionOf": "Sixth Doctor",
+"traits": [
+"companion",
+"human",
+"computerProgrammer",
+"fitnessEnthusiast",
+"cheerfulPersonality",
+"travelsInTardis",
+"newWhoReturn"
+]
+},
+{
+"name": "Ace",
+"type": "companion",
+"era": "classic",
+"gender": "female",
+"mainCompanionOf": "Seventh Doctor",
+"traits": [
+"companion",
+"human",
+"explosivesExpert",
+"chemistrySkills",
+"teenRebel",
+"bruteForceTactics",
+"seventhDoctorEra",
+"travelsInTardis"
+]
+},
+{
+"name": "Grace Holloway",
+"type": "companion",
+"era": "movie",
+"gender": "female",
+"mainCompanionOf": "Eighth Doctor",
+"traits": [
+"companion",
+"human",
+"medicalDoctor",
+"cardiologist",
+"doctorWhoMovie",
+"sanFranciscoSetting",
+"nonSeriesCompanion"
+]
+},
+{
+"name": "Charley Pollard",
+"type": "companion",
+"era": "audio",
+"gender": "female",
+"mainCompanionOf": "Eighth Doctor",
+"traits": [
+"companion",
+"human",
+"edwardianEraOrigin",
+"historicalCompanion",
+"timeDisplaced",
+"bigFinishAudio",
+"eighthDoctorAudioEra"
+]
+},
+{
+"name": "Rose Tyler",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Ninth Doctor",
+"traits": [
+"companion",
+"human",
+"shopAssistant",
+"parallelUniverseTravel",
+"badWolfEntity",
+"metaHumanEvolution",
+"multipleDoctors",
+"travelsInTardis"
+]
+},
+{
+"name": "Mickey Smith",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Ninth Doctor",
+"traits": [
+"companion",
+"human",
+"mechanic",
+"insecureInitially",
+"parallelEarthResistance",
+"cybermenSurvivor"
+]
+},
+{
+"name": "Captain Jack Harkness",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Ninth Doctor",
+"traits": [
+"companion",
+"immortal",
+"timeTraveler",
+"formerConMan",
+"torchwoodAgent",
+"bisexualRepresentation",
+"spinOffLead",
+"neverDies"
+]
+},
+{
+"name": "Martha Jones",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Tenth Doctor",
+"traits": [
+"companion",
+"human",
+"medicalDoctor",
+"unitAgent",
+"selfReliant",
+"walkedTheEarth",
+"trainedMedic",
+"travelsInTardis"
+]
+},
+{
+"name": "Donna Noble",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Tenth Doctor",
+"traits": [
+"companion",
+"human",
+"tempWorker",
+"doctorDonna",
+"memoryWipeArc",
+"londonEarth",
+"noRomanticInterestDoctor",
+"travelsInTardis"
+]
+},
+{
+"name": "Amy Pond",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Eleventh Doctor",
+"traits": [
+"companion",
+"human",
+"kissogram",
+"girlWhoWaited",
+"childhoodEncounterDoctor",
+"motherOfRiverSong",
+"marriedToRory",
+"travelsInTardis"
+]
+},
+{
+"name": "Rory Williams",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Eleventh Doctor",
+"traits": [
+"companion",
+"human",
+"nurse",
+"romanCenturionReincarnation",
+"patientLoyalty",
+"marriedToAmy",
+"raggedManThroughTime",
+"travelsInTardis"
+]
+},
+{
+"name": "River Song",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Eleventh Doctor",
+"traits": [
+"companion",
+"timeTraveler",
+"archaeologist",
+"reverseTimelineRelationship",
+"daughterOfAmyAndRory",
+"timeLordDNA",
+"wifeOfDoctor",
+"knowsDoctorsName"
+]
+},
+{
+"name": "Clara Oswald",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Twelfth Doctor",
+"traits": [
+"companion",
+"human",
+"schoolTeacher",
+"impossibleGirl",
+"splinterVersions",
+"multipleDoctorsCompanion",
+"victorianIncarnation",
+"travelsInTardis"
+]
+},
+{
+"name": "Bill Potts",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Twelfth Doctor",
+"traits": [
+"companion",
+"human",
+"student",
+"cybermanConversion",
+"workingClassBackground",
+"londonUniversity",
+"openlyGayRepresentation"
+]
+},
+{
+"name": "Nardole",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Twelfth Doctor",
+"traits": [
+"companion",
+"alien",
+"cyborgParts",
+"guardingVault",
+"humorousAssistant",
+"riverSongConnection",
+"maintenanceWorker"
+]
+},
+{
+"name": "Yaz Khan",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Thirteenth Doctor",
+"traits": [
+"companion",
+"human",
+"policeOfficer",
+"unitTraining",
+"quietDetermined",
+"leaderGrowthArc",
+"travelsInTardis"
+]
+},
+{
+"name": "Ryan Sinclair",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Thirteenth Doctor",
+"traits": [
+"companion",
+"human",
+"dyspraxiaRepresentation",
+"warehouseWorker",
+"emotionalGrowthArc",
+"grandsonOfGraham",
+"travelsInTardis"
+]
+},
+{
+"name": "Graham O'Brien",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Thirteenth Doctor",
+"traits": [
+"companion",
+"human",
+"busDriver",
+"cancerSurvivor",
+"grandfatherFigure",
+"widower",
+"emotionalSupportCharacter"
+]
+},
+{
+"name": "Dan Lewis",
+"type": "companion",
+"era": "new",
+"gender": "male",
+"mainCompanionOf": "Thirteenth Doctor",
+"traits": [
+"companion",
+"human",
+"comedianPersonality",
+"historyEnthusiast",
+"liverpoolOrigin",
+"everymanHero",
+"romanticFailureArc"
+]
+},
+{
+"name": "Ruby Sunday",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Fifteenth Doctor",
+"traits": [
+"companion",
+"human",
+"foundAsBabyMystery",
+"orphanMysteryArc",
+"snowLinkedPhenomenon",
+"modernEarthOrigin",
+"travelsInTardis"
+]
+},
+{
+"name": "Belinda Chandra",
+"type": "companion",
+"era": "new",
+"gender": "female",
+"mainCompanionOf": "Fifteenth Doctor",
+"traits": [
+"companion",
+"human",
+"medicalWorker",
+"responsibilityFocused",
+"reluctantAdventurer",
+"earthBoundCareer",
+"practicalMindset"
+]
+}
 ]
