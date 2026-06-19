@@ -1,0 +1,75 @@
+{
+  "coreTraits": [
+    "doctor",
+    "companion",
+    "villain",
+    "recurring",
+    "timelord",
+    "human",
+    "alien",
+    "robotic",
+    "immortal",
+    "female",
+    "male",
+    "nonBinary",
+    "classicWho",
+    "newWho",
+    "travelsInTardis",
+    "associatedWithUNIT",
+    "associatedWithTorchwood",
+    "timeTraveler"
+  ],
+
+  "factionTraits": [
+    "UNIT",
+    "Torchwood",
+    "TimeLords",
+    "Gallifrey",
+    "PaternosterGang"
+  ],
+
+  "speciesTraits": [
+    "dalek",
+    "cyberman",
+    "sontaran",
+    "silurian",
+    "zygons",
+    "ood",
+    "weepingAngel",
+    "silence",
+    "humanLike"
+  ],
+
+  "abilityTraits": [
+    "regenerates",
+    "shapeShifter",
+    "telepathic",
+    "timeLocked",
+    "hiveMind",
+    "memoryWipe",
+    "immortal"
+  ],
+
+  "storyTraits": [
+    "foughtTimeWar",
+    "createdDaleks",
+    "partOfProphecy",
+    "destroyedGallifrey",
+    "lastOfSpecies",
+    "leader",
+    "scientist",
+    "soldier",
+    "politician"
+  ],
+
+  "doctorSpecificTraits": [
+    "biGenerated",
+    "warDoctor",
+    "fugitiveDoctor",
+    "usesSonic",
+    "wearsBowTie",
+    "wearsScarf",
+    "playsGuitar",
+    "allonsY"
+  ]
+}
