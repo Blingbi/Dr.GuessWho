@@ -4,6 +4,8 @@ import { GuessWhoDoctorWhoEngine } from "./engine/guessWhoDoctorWhoEngine.js";
 import data from "./data/mergeData.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM READY");
+
   const game = new GuessWhoDoctorWhoEngine(data);
 
   const input = document.getElementById("guessInput");
@@ -40,42 +42,57 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.onclick = () => {
         input.value = character.name;
         suggestions.innerHTML = "";
+        input.focus();
       };
 
       suggestions.appendChild(btn);
     });
   }
 
+  function createCard(label, value, state) {
+    const card = document.createElement("div");
+    card.className = `guess-card ${state}`;
+
+    card.innerHTML = `
+      <span class="field-label-mobile">${label}</span>
+      <strong>${titleCase(value)}</strong>
+    `;
+
+    return card;
+  }
+
   function renderGuess(result) {
+    const block = document.createElement("div");
+    block.className = "guess-block";
+
     const row = document.createElement("div");
     row.className = "guess-row";
 
-    const nameCard = document.createElement("div");
-    nameCard.className = result.correct ? "guess-name correct" : "guess-name incorrect";
-    nameCard.textContent = result.guess.name;
-    row.appendChild(nameCard);
-
-    result.fields.slice(1).forEach(field => {
-      const card = document.createElement("div");
-      card.className = `result-card ${field.state}`;
-      card.innerHTML = `
-        <span class="field-label">${field.label}</span>
-        <strong>${titleCase(field.guessValue)}</strong>
-      `;
-      row.appendChild(card);
+    result.fields.forEach(field => {
+      row.appendChild(
+        createCard(field.label, field.guessValue, field.state)
+      );
     });
-
-    guesses.prepend(row);
 
     const traitBox = document.createElement("div");
     traitBox.className = "trait-details";
 
     traitBox.innerHTML = `
       <strong>Matching traits:</strong>
-      ${result.matchingTraits.length ? result.matchingTraits.map(titleCase).join(", ") : "None"}
+      ${result.matchingTraits.length
+        ? result.matchingTraits.map(titleCase).join(", ")
+        : "None"}
+      <br>
+      <strong>Missing traits:</strong>
+      ${result.missingTraits.length
+        ? result.missingTraits.slice(0, 8).map(titleCase).join(", ")
+        : "None"}
     `;
 
-    guesses.prepend(traitBox);
+    block.appendChild(row);
+    block.appendChild(traitBox);
+
+    guesses.prepend(block);
   }
 
   function submitGuess() {
@@ -89,11 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const result = game.compareGuess(name);
 
     if (result.error) {
-      setStatus("Character not found. Try choosing from the suggestions.");
+      setStatus("Character not found. Pick one from the suggestions.");
       return;
     }
 
     renderGuess(result);
+
     input.value = "";
     suggestions.innerHTML = "";
 
@@ -101,24 +119,31 @@ document.addEventListener("DOMContentLoaded", () => {
       setStatus(`🎉 Correct! You found today's character in ${game.getGuessCount()} guesses.`);
       input.disabled = true;
       submitBtn.disabled = true;
-    } else {
-      setStatus(`Guess ${game.getGuessCount()} submitted. Keep scanning the vortex.`);
+      return;
     }
+
+    setStatus(`Guess ${game.getGuessCount()} submitted. Keep scanning the vortex.`);
   }
 
   function resetGame() {
     game.reset();
+
     guesses.innerHTML = "";
     input.disabled = false;
     submitBtn.disabled = false;
     input.value = "";
     suggestions.innerHTML = "";
+
     setStatus("Guess today's Doctor Who character.");
+    input.focus();
   }
 
   input.addEventListener("input", renderSuggestions);
+
   input.addEventListener("keydown", e => {
-    if (e.key === "Enter") submitGuess();
+    if (e.key === "Enter") {
+      submitGuess();
+    }
   });
 
   submitBtn.addEventListener("click", submitGuess);
