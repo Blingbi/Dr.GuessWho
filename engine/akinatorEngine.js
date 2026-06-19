@@ -1,39 +1,53 @@
 export class AkinatorEngine {
   constructor(data) {
-    this.allCharacters = data;
-    this.candidates = [...data];
+    // ✅ Normalize ALL characters safely
+    this.allCharacters = data.map(c => ({
+      ...c,
+      traits: Array.isArray(c.traits) ? c.traits : []
+    }));
+
+    this.candidates = [...this.allCharacters];
     this.askedTraits = new Set();
     this.lastTraitAsked = null;
 
-    this.startCount = data.length;
+    this.startCount = this.allCharacters.length;
 
+    // ----------------------------
+    // TRAIT FREQUENCY MAP
+    // ----------------------------
     this.traitFrequency = new Map();
 
-    for (const c of data) {
+    for (const c of this.allCharacters) {
       for (const t of c.traits) {
         this.traitFrequency.set(t, (this.traitFrequency.get(t) || 0) + 1);
       }
     }
-    getPhase() {
-      const remaining = this.candidates.length;
-    
-      if (remaining > 25) return "early";
-      if (remaining > 6) return "mid";
-      return "end";
-    }
+
     // ----------------------------
     // TRAIT INDEX (FAST LOOKUP)
     // ----------------------------
     this.traitIndex = new Map();
 
-    for (const c of data) {
+    for (const c of this.allCharacters) {
       for (const t of c.traits) {
         if (!this.traitIndex.has(t)) {
           this.traitIndex.set(t, new Set());
         }
-        this.traitIndex.get(t).add(c);
+        // store NAME instead of object (more stable)
+        this.traitIndex.get(t).add(c.name);
       }
     }
+  }
+
+  // ----------------------------
+  // GAME PHASE
+  // ----------------------------
+  getPhase() {
+    const remaining = this.candidates.length;
+
+    if (remaining > 25) return "early";
+    if (remaining > 6) return "mid";
+    return "end";
   }
 
   // ----------------------------
@@ -46,43 +60,41 @@ export class AkinatorEngine {
   }
 
   // ----------------------------
-  // DEPTH (how far into game)
+  // DEPTH
   // ----------------------------
   getDepth() {
-    const remaining = this.candidates.length;
-    const total = this.startCount;
-    return 1 - (remaining / total);
+    return 1 - (this.candidates.length / this.startCount);
   }
 
   // ----------------------------
   // TRAIT WEIGHTS
   // ----------------------------
-traitWeight(trait) {
-  const baseWeights = {
-    villain: 5,
-    companion: 5,
-    doctor: 5,
+  traitWeight(trait) {
+    const baseWeights = {
+      villain: 5,
+      companion: 5,
+      doctor: 5,
 
-    human: 3,
-    alien: 3,
+      human: 3,
+      alien: 3,
 
-    timelord: 3.5,
-    immortal: 2,
+      timelord: 3.5,
+      immortal: 2,
 
-    male: 2,
-    female: 2
-  };
+      male: 2,
+      female: 2
+    };
 
-  const base = baseWeights[trait] || 1;
+    const base = baseWeights[trait] || 1;
 
-  const freq = this.traitFrequency.get(trait) || 1;
-  const rarityBoost = 1 / Math.log2(freq + 1);
+    const freq = this.traitFrequency.get(trait) || 1;
+    const rarityBoost = 1 / Math.log2(freq + 1);
 
-  return base * (1 + rarityBoost);
-}
+    return base * (1 + rarityBoost);
+  }
 
   // ----------------------------
-  // SPLIT BY TRAIT (FAST VERSION)
+  // SPLIT BY TRAIT
   // ----------------------------
   splitByTrait(trait) {
     const yesSet = this.traitIndex.get(trait) || new Set();
@@ -91,50 +103,50 @@ traitWeight(trait) {
     const no = [];
 
     for (const c of this.candidates) {
-      if (yesSet.has(c)) yes.push(c);
+      if (yesSet.has(c.name)) yes.push(c);
       else no.push(c);
     }
 
     return { yes, no };
   }
+
   isBadTraitSplit(trait) {
-  const { yes, no } = this.splitByTrait(trait);
+    const { yes, no } = this.splitByTrait(trait);
 
-  const ratio = yes.length / (no.length + 1);
+    const ratio = yes.length / (no.length + 1);
 
-  return ratio < 0.15 || ratio > 0.85;
-}
-
-  // ----------------------------
-  // ENTROPY (FIXED)
-  // ----------------------------
-informationGain(trait) {
-  const total = this.candidates.length;
-  if (total <= 1) return 0;
-
-  let yes = 0;
-
-  for (const c of this.candidates) {
-    if (c.traits.includes(trait)) yes++;
+    return ratio < 0.15 || ratio > 0.85;
   }
 
-  const no = total - yes;
+  // ----------------------------
+  // INFORMATION GAIN
+  // ----------------------------
+  informationGain(trait) {
+    const total = this.candidates.length;
+    if (total <= 1) return 0;
 
-  if (yes === 0 || no === 0) return 0;
+    let yes = 0;
 
-  const pYes = yes / total;
-  const pNo = no / total;
+    for (const c of this.candidates) {
+      if (c.traits.includes(trait)) yes++;
+    }
 
-  const entropyBefore = Math.log2(total);
-  const entropyAfter =
-    -pYes * Math.log2(pYes) -
-    -pNo * Math.log2(pNo);
+    const no = total - yes;
+    if (yes === 0 || no === 0) return 0;
 
-  return entropyBefore - entropyAfter;
-}
+    const pYes = yes / total;
+    const pNo = no / total;
+
+    const entropyBefore = Math.log2(total);
+    const entropyAfter =
+      -pYes * Math.log2(pYes) -
+      pNo * Math.log2(pNo);
+
+    return entropyBefore - entropyAfter;
+  }
 
   // ----------------------------
-  // GET ALL POSSIBLE TRAITS
+  // ALL TRAITS
   // ----------------------------
   getAllTraits() {
     const set = new Set();
@@ -151,7 +163,7 @@ informationGain(trait) {
   }
 
   // ----------------------------
-  // BEST QUESTION SELECTION
+  // BEST TRAIT
   // ----------------------------
   getBestTrait() {
     const traits = this.getAllTraits();
@@ -159,72 +171,60 @@ informationGain(trait) {
     let bestTrait = null;
     let bestScore = -Infinity;
 
-    const depth = this.getDepth();
+    const phase = this.getPhase();
 
-  const phase = this.getPhase();
+    for (const trait of traits) {
+      if (this.isBadTraitSplit(trait)) continue;
 
-for (const trait of traits) {
-  if (this.isBadTraitSplit(trait)) continue;
+      const ig = this.informationGain(trait);
+      const weight = this.traitWeight(trait);
 
-  const ig = this.informationGain(trait);
-  const weight = this.traitWeight(trait);
+      let phaseBoost = 1;
 
-  let phaseBoost = 1;
+      if (phase === "early") phaseBoost = 1.2;
+      if (phase === "end") phaseBoost = 1.4;
 
-  if (phase === "early") {
-    // prefer broad splits
-    phaseBoost = 1.2;
+      const depthPenalty = 1 - this.getDepth() * 0.5;
+
+      const score =
+        ig *
+        (1 + Math.log(weight)) *
+        phaseBoost *
+        depthPenalty;
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestTrait = trait;
+      }
+    }
+
+    return bestTrait || this.getFallbackTrait();
   }
 
-  if (phase === "mid") {
-    // balanced selection
-    phaseBoost = 1.0;
-  }
+  // ----------------------------
+  // FALLBACK TRAIT
+  // ----------------------------
+  getFallbackTrait() {
+    const traits = this.getAllTraits();
 
-  if (phase === "end") {
-    // favor rare / precise traits
-    phaseBoost = 1.4;
-  }
+    let bestTrait = null;
+    let bestSplitScore = -Infinity;
 
-  const depthPenalty = 1 - this.getDepth() * 0.5;
+    for (const trait of traits) {
+      const { yes, no } = this.splitByTrait(trait);
+      const split = Math.min(yes.length, no.length);
 
-  const score =
-    ig *
-    (1 + Math.log(weight)) *
-    phaseBoost *
-    depthPenalty;
+      if (split > bestSplitScore) {
+        bestSplitScore = split;
+        bestTrait = trait;
+      }
+    }
 
-  if (score > bestScore) {
-    bestScore = score;
-    bestTrait = trait;
-  }
-}
-if (!bestTrait) {
-  return this.getFallbackTrait();
-}
     return bestTrait;
   }
-getFallbackTrait() {
-  const traits = this.getAllTraits();
 
-  let bestTrait = null;
-  let bestSplitScore = -Infinity;
-
-  for (const trait of traits) {
-    const { yes, no } = this.splitByTrait(trait);
-
-    const split = Math.min(yes.length, no.length);
-
-    if (split > bestSplitScore) {
-      bestSplitScore = split;
-      bestTrait = trait;
-    }
-  }
-
-  return bestTrait;
-}
   // ----------------------------
-  // FILTER BY ANSWER
+  // FILTER
   // ----------------------------
   filterByTrait(trait, answer) {
     this.askedTraits.add(trait);
@@ -241,7 +241,7 @@ getFallbackTrait() {
   }
 
   // ----------------------------
-  // CONFIDENCE MODEL (IMPROVED)
+  // PROBABILITY MODEL
   // ----------------------------
   calculateCandidateScore(candidate) {
     let score = 1;
@@ -270,29 +270,27 @@ getFallbackTrait() {
   // ----------------------------
   // GUESS LOGIC
   // ----------------------------
-shouldGuess() {
-  const probs = this.getProbabilities();
+  shouldGuess() {
+    const probs = this.getProbabilities();
+    if (probs.length === 0) return false;
 
-  if (probs.length === 0) return false;
+    const best = probs.reduce((a, b) =>
+      a.probability > b.probability ? a : b
+    );
 
-  const best = probs.reduce((a, b) =>
-    a.probability > b.probability ? a : b
-  );
+    const phase = this.getPhase();
 
-  const phase = this.getPhase();
+    if (phase === "early") return false;
 
-  if (phase === "early") return false;
+    if (phase === "mid") {
+      return best.probability > 0.95 || this.candidates.length <= 2;
+    }
 
-  if (phase === "mid") {
-    return best.probability > 0.95 || this.candidates.length <= 2;
+    return best.probability > 0.85 || this.candidates.length <= 2;
   }
 
-  // end game
-  return best.probability > 0.85 || this.candidates.length <= 2;
-}
   guess() {
     const probs = this.getProbabilities();
-
     if (probs.length === 0) return null;
 
     return probs.reduce((a, b) =>
@@ -301,7 +299,7 @@ shouldGuess() {
   }
 
   // ----------------------------
-  // QUESTION FORMATTER
+  // QUESTION FORMAT
   // ----------------------------
   formatQuestion(trait) {
     const map = {
@@ -329,7 +327,7 @@ shouldGuess() {
   }
 
   // ----------------------------
-  // MAIN GAME LOOP
+  // MAIN LOOP
   // ----------------------------
   nextStep(answer = null) {
     if (this.lastTraitAsked) {
